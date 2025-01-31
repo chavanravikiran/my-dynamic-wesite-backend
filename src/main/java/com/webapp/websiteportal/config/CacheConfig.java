@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.config;
+package com.webapp.websiteportal.config;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

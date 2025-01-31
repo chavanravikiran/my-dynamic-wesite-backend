@@ -1,9 +1,9 @@
-package com.webapp.bankingportal.util;
+package com.webapp.websiteportal.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
-import com.webapp.bankingportal.exception.NotFoundException;
+import com.webapp.websiteportal.exception.NotFoundException;
 
 import lombok.val;
 

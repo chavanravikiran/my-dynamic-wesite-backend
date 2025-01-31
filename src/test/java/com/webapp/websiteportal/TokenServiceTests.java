@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import java.util.Date;
 
@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webapp.bankingportal.exception.InvalidTokenException;
-import com.webapp.bankingportal.repository.TokenRepository;
-import com.webapp.bankingportal.util.ApiMessages;
+import com.webapp.websiteportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.repository.TokenRepository;
+import com.webapp.websiteportal.util.ApiMessages;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

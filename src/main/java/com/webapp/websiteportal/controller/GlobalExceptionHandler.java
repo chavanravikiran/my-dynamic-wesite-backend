@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.controller;
+package com.webapp.websiteportal.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,19 +9,19 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.request.WebRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.webapp.bankingportal.exception.AccountDoesNotExistException;
-import com.webapp.bankingportal.exception.FundTransferException;
-import com.webapp.bankingportal.exception.GeolocationException;
-import com.webapp.bankingportal.exception.InsufficientBalanceException;
-import com.webapp.bankingportal.exception.InvalidAmountException;
-import com.webapp.bankingportal.exception.InvalidTokenException;
-import com.webapp.bankingportal.exception.InvalidOtpException;
-import com.webapp.bankingportal.exception.InvalidPinException;
-import com.webapp.bankingportal.exception.NotFoundException;
-import com.webapp.bankingportal.exception.OtpRetryLimitExceededException;
-import com.webapp.bankingportal.exception.PasswordResetException;
-import com.webapp.bankingportal.exception.UnauthorizedException;
-import com.webapp.bankingportal.exception.UserInvalidException;
+import com.webapp.websiteportal.exception.AccountDoesNotExistException;
+import com.webapp.websiteportal.exception.FundTransferException;
+import com.webapp.websiteportal.exception.GeolocationException;
+import com.webapp.websiteportal.exception.InsufficientBalanceException;
+import com.webapp.websiteportal.exception.InvalidAmountException;
+import com.webapp.websiteportal.exception.InvalidOtpException;
+import com.webapp.websiteportal.exception.InvalidPinException;
+import com.webapp.websiteportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.exception.NotFoundException;
+import com.webapp.websiteportal.exception.OtpRetryLimitExceededException;
+import com.webapp.websiteportal.exception.PasswordResetException;
+import com.webapp.websiteportal.exception.UnauthorizedException;
+import com.webapp.websiteportal.exception.UserInvalidException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

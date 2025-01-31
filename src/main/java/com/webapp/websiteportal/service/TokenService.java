@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
 import java.util.Date;
 import java.util.function.Function;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.webapp.bankingportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.exception.InvalidTokenException;
 
 import io.jsonwebtoken.Claims;
 

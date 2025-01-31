@@ -1,7 +1,7 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
-import com.webapp.bankingportal.dto.AccountResponse;
-import com.webapp.bankingportal.dto.UserResponse;
+import com.webapp.websiteportal.dto.AccountResponse;
+import com.webapp.websiteportal.dto.UserResponse;
 
 public interface DashboardService {
     UserResponse getUserDetails(String accountNumber);

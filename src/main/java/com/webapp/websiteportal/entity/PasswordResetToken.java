@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.entity;
+package com.webapp.websiteportal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class PasswordResetToken implements Serializable {
-    @Id
+	private static final long serialVersionUID = -4123074818114107723L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passwordresettoken_sequence")
     @SequenceGenerator(name = "passwordresettoken_sequence", sequenceName = "passwordresettoken_sequence", allocationSize = 100)
     private Long id;
@@ -32,12 +34,12 @@ public class PasswordResetToken implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Users user;
 
     @Column(nullable = false)
     private LocalDateTime expiryDateTime;
 
-    public PasswordResetToken(String token, User user, LocalDateTime expiryDateTime) {
+    public PasswordResetToken(String token, Users user, LocalDateTime expiryDateTime) {
         this.token = token;
         this.user = user;
         this.expiryDateTime = expiryDateTime;

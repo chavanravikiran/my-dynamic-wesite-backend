@@ -1,9 +1,9 @@
-package com.webapp.bankingportal.dto;
+package com.webapp.websiteportal.dto;
 
 import java.util.Date;
 
-import com.webapp.bankingportal.entity.Transaction;
-import com.webapp.bankingportal.entity.TransactionType;
+import com.webapp.websiteportal.entity.Transaction;
+import com.webapp.websiteportal.entity.TransactionType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

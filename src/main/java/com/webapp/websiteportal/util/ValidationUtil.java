@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.util;
+package com.webapp.websiteportal.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +7,9 @@ import org.springframework.stereotype.Component;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
-
-import com.webapp.bankingportal.entity.User;
-import com.webapp.bankingportal.exception.UserInvalidException;
-import com.webapp.bankingportal.repository.UserRepository;
+import com.webapp.websiteportal.entity.Users;
+import com.webapp.websiteportal.exception.UserInvalidException;
+import com.webapp.websiteportal.repository.UserRepository;
 
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
@@ -117,7 +116,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void validateUserDetailsNotEmpty(User user) {
+    public static void validateUserDetailsNotEmpty(Users user) {
         if (user == null) {
             throw new UserInvalidException(ApiMessages.USER_DETAILS_EMPTY_ERROR.getMessage());
         }
@@ -147,7 +146,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void validateUserDetails(User user) {
+    public static void validateUserDetails(Users user) {
         validateUserDetailsNotEmpty(user);
 
         if (!isValidEmail(user.getEmail())) {
@@ -165,7 +164,7 @@ public class ValidationUtil {
         validatePassword(user.getPassword());
     }
 
-    public void validateNewUser(User user) {
+    public void validateNewUser(Users user) {
         validateUserDetails(user);
         if (doesEmailExist(user.getEmail())) {
             throw new UserInvalidException(ApiMessages.USER_EMAIL_ALREADY_EXISTS_ERROR.getMessage());

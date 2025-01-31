@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
 import java.sql.Timestamp;
 import java.util.concurrent.CompletableFuture;
@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.webapp.bankingportal.dto.LoginRequest;
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.dto.UserResponse;
-import com.webapp.bankingportal.entity.User;
-import com.webapp.bankingportal.exception.InvalidTokenException;
-import com.webapp.bankingportal.exception.PasswordResetException;
-import com.webapp.bankingportal.exception.UnauthorizedException;
-import com.webapp.bankingportal.exception.UserInvalidException;
-import com.webapp.bankingportal.mapper.UserMapper;
-import com.webapp.bankingportal.repository.UserRepository;
-import com.webapp.bankingportal.util.JsonUtil;
-import com.webapp.bankingportal.util.LoggedinUser;
-import com.webapp.bankingportal.util.ValidationUtil;
-import com.webapp.bankingportal.util.ApiMessages;
+import com.webapp.websiteportal.dto.LoginRequest;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.dto.UserResponse;
+import com.webapp.websiteportal.entity.Users;
+import com.webapp.websiteportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.exception.PasswordResetException;
+import com.webapp.websiteportal.exception.UnauthorizedException;
+import com.webapp.websiteportal.exception.UserInvalidException;
+import com.webapp.websiteportal.mapper.UserMapper;
+import com.webapp.websiteportal.repository.UserRepository;
+import com.webapp.websiteportal.util.ApiMessages;
+import com.webapp.websiteportal.util.JsonUtil;
+import com.webapp.websiteportal.util.LoggedinUser;
+import com.webapp.websiteportal.util.ValidationUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     private final ValidationUtil validationUtil;
 
     @Override
-    public ResponseEntity<String> registerUser(User user) {
+    public ResponseEntity<String> registerUser(Users user) {
         validationUtil.validateNewUser(user);
         encodePassword(user);
         val savedUser = saveUserWithAccount(user);
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> updateUser(User updatedUser) {
+    public ResponseEntity<String> updateUser(Users updatedUser) {
         val accountNumber = LoggedinUser.getAccountNumber();
         authenticateUser(accountNumber, updatedUser.getPassword());
         val existingUser = getUserByAccountNumber(accountNumber);
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean resetPassword(User user, String newPassword) {
+    public boolean resetPassword(Users user, String newPassword) {
         try {
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
@@ -119,13 +119,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public Users saveUser(Users user) {
         return userRepository.save(user);
     }
 
     @Override
-    public User getUserByIdentifier(String identifier) {
-        User user = null;
+    public Users getUserByIdentifier(String identifier) {
+        Users user = null;
 
         if (validationUtil.doesEmailExist(identifier)) {
             user = getUserByEmail(identifier);
@@ -140,30 +140,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByAccountNumber(String accountNo) {
+    public Users getUserByAccountNumber(String accountNo) {
         return userRepository.findByAccountAccountNumber(accountNo).orElseThrow(
                 () -> new UserInvalidException(
                         String.format(ApiMessages.USER_NOT_FOUND_BY_ACCOUNT.getMessage(), accountNo)));
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Users getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new UserInvalidException(String.format(ApiMessages.USER_NOT_FOUND_BY_EMAIL.getMessage(), email)));
     }
 
-    private void encodePassword(User user) {
+    private void encodePassword(Users user) {
         user.setCountryCode(user.getCountryCode().toUpperCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    private User saveUserWithAccount(User user) {
+    private Users saveUserWithAccount(Users user) {
         val savedUser = saveUser(user);
         savedUser.setAccount(accountService.createAccount(savedUser));
         return saveUser(savedUser);
     }
 
-    private User authenticateUser(LoginRequest loginRequest) {
+    private Users authenticateUser(LoginRequest loginRequest) {
         val user = getUserByIdentifier(loginRequest.identifier());
         val accountNumber = user.getAccount().getAccountNumber();
         authenticationManager
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService {
         return token;
     }
 
-    private ResponseEntity<String> sendOtpEmail(User user, String otp) {
+    private ResponseEntity<String> sendOtpEmail(Users user, String otp) {
         val emailSendingFuture = otpService.sendOTPByEmail(
                 user.getEmail(), user.getName(), user.getAccount().getAccountNumber(), otp);
 
@@ -204,19 +204,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void validateOtp(User user, String otp) {
+    private void validateOtp(Users user, String otp) {
         if (!otpService.validateOTP(user.getAccount().getAccountNumber(), otp)) {
             throw new UnauthorizedException(ApiMessages.OTP_INVALID_ERROR.getMessage());
         }
     }
 
-    private void updateUserDetails(User existingUser, User updatedUser) {
+    private void updateUserDetails(Users existingUser, Users updatedUser) {
         ValidationUtil.validateUserDetails(updatedUser);
         updatedUser.setPassword(existingUser.getPassword());
         userMapper.updateUser(updatedUser, existingUser);
     }
 
-    private CompletableFuture<Boolean> sendLoginNotification(User user, String ip) {
+    private CompletableFuture<Boolean> sendLoginNotification(Users user, String ip) {
         val loginTime = new Timestamp(System.currentTimeMillis()).toString();
 
         return geolocationService.getGeolocation(ip)
@@ -229,7 +229,7 @@ public class UserServiceImpl implements UserService {
                 .exceptionallyComposeAsync(throwable -> sendLoginEmail(user, loginTime, "Unknown"));
     }
 
-    private CompletableFuture<Boolean> sendLoginEmail(User user, String loginTime, String loginLocation) {
+    private CompletableFuture<Boolean> sendLoginEmail(Users user, String loginTime, String loginLocation) {
         val emailText = emailService.getLoginEmailTemplate(user.getName(), loginTime, loginLocation);
         return emailService.sendEmail(user.getEmail(), ApiMessages.EMAIL_SUBJECT_LOGIN.getMessage(), emailText)
                 .thenApplyAsync(result -> true)

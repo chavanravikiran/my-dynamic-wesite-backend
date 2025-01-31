@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.security;
+package com.webapp.websiteportal.security;
 
 import java.io.IOException;
 

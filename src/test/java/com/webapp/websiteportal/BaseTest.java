@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import static org.springframework.security.core.userdetails.User.withUsername;
 
@@ -22,16 +22,15 @@ import com.github.javafaker.Faker;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.jayway.jsonpath.JsonPath;
-
-import com.webapp.bankingportal.dto.AmountRequest;
-import com.webapp.bankingportal.dto.LoginRequest;
-import com.webapp.bankingportal.dto.PinRequest;
-import com.webapp.bankingportal.entity.User;
-import com.webapp.bankingportal.repository.UserRepository;
-import com.webapp.bankingportal.service.AccountService;
-import com.webapp.bankingportal.service.TokenService;
-import com.webapp.bankingportal.util.ApiMessages;
-import com.webapp.bankingportal.util.JsonUtil;
+import com.webapp.websiteportal.dto.AmountRequest;
+import com.webapp.websiteportal.dto.LoginRequest;
+import com.webapp.websiteportal.dto.PinRequest;
+import com.webapp.websiteportal.entity.Users;
+import com.webapp.websiteportal.repository.UserRepository;
+import com.webapp.websiteportal.service.AccountService;
+import com.webapp.websiteportal.service.TokenService;
+import com.webapp.websiteportal.util.ApiMessages;
+import com.webapp.websiteportal.util.JsonUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -117,10 +116,10 @@ public abstract class BaseTest {
                 withUsername(username).password(password).build(), expiry);
     }
 
-    protected static User createUser() {
+    protected static Users createUser() {
         val countryCode = getRandomCountryCode();
         val phoneNumber = getRandomPhoneNumber(countryCode);
-        val user = new User();
+        val user = new Users();
         user.setName(faker.name().fullName());
         user.setPassword(getRandomPassword());
         user.setEmail(faker.internet().safeEmailAddress());
@@ -130,7 +129,7 @@ public abstract class BaseTest {
         return user;
     }
 
-    protected User createAndRegisterUser() throws Exception {
+    protected Users createAndRegisterUser() throws Exception {
         val user = createUser();
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/users/register")

@@ -1,13 +1,13 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.webapp.bankingportal.dto.TransactionDTO;
-import com.webapp.bankingportal.mapper.TransactionMapper;
-import com.webapp.bankingportal.repository.TransactionRepository;
+import com.webapp.websiteportal.dto.TransactionDTO;
+import com.webapp.websiteportal.mapper.TransactionMapper;
+import com.webapp.websiteportal.repository.TransactionRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

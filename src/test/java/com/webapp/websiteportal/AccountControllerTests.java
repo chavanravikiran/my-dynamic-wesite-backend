@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -7,12 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.webapp.bankingportal.dto.AmountRequest;
-import com.webapp.bankingportal.dto.FundTransferRequest;
-import com.webapp.bankingportal.dto.PinRequest;
-import com.webapp.bankingportal.dto.PinUpdateRequest;
-import com.webapp.bankingportal.util.ApiMessages;
-import com.webapp.bankingportal.util.JsonUtil;
+import com.webapp.websiteportal.dto.AmountRequest;
+import com.webapp.websiteportal.dto.FundTransferRequest;
+import com.webapp.websiteportal.dto.PinRequest;
+import com.webapp.websiteportal.dto.PinUpdateRequest;
+import com.webapp.websiteportal.util.ApiMessages;
+import com.webapp.websiteportal.util.JsonUtil;
 
 import lombok.val;
 

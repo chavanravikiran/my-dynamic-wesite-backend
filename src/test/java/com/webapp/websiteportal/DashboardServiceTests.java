@@ -1,11 +1,11 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webapp.bankingportal.exception.NotFoundException;
-import com.webapp.bankingportal.service.DashboardService;
+import com.webapp.websiteportal.exception.NotFoundException;
+import com.webapp.websiteportal.service.DashboardService;
 
 import lombok.val;
 

@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.entity;
+package com.webapp.websiteportal.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,7 +22,8 @@ import lombok.Data;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
+    @SequenceGenerator(name = "account_seq", sequenceName = "account_sequence", allocationSize = 1)
     private Long id;
 
     @NotEmpty
@@ -40,7 +42,7 @@ public class Account {
     @NotNull
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users user;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Token> tokens = new ArrayList<>();

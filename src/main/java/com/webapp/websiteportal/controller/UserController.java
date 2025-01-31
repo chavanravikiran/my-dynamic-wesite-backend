@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.controller;
+package com.webapp.websiteportal.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.webapp.bankingportal.dto.LoginRequest;
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.entity.User;
-import com.webapp.bankingportal.exception.InvalidTokenException;
-import com.webapp.bankingportal.service.UserService;
+import com.webapp.websiteportal.dto.LoginRequest;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.entity.Users;
+import com.webapp.websiteportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody Users user) {
         return userService.registerUser(user);
     }
 
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody User user) {
+    public ResponseEntity<String> updateUser(@RequestBody Users user) {
         return userService.updateUser(user);
     }
 

@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.controller;
+package com.webapp.websiteportal.controller;
 
 import org.springframework.http.ResponseEntity;
 
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webapp.bankingportal.service.DashboardService;
-import com.webapp.bankingportal.util.JsonUtil;
-import com.webapp.bankingportal.util.LoggedinUser;
+import com.webapp.websiteportal.service.DashboardService;
+import com.webapp.websiteportal.util.JsonUtil;
+import com.webapp.websiteportal.util.LoggedinUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

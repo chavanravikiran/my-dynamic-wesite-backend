@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.util;
+package com.webapp.websiteportal.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +41,7 @@ public enum ApiMessages {
     PIN_INVALID_ERROR("Invalid PIN"),
     PIN_NOT_CREATED("PIN has not been created for this account"),
     PIN_UPDATE_SUCCESS("{\"hasPIN\": false, \"msg\": \"PIN updated successfully\"}"),
+    OLD_AND_NEW_PIN_ARE_SAME("Old And New Pin Are Name Please Try Again with Different"),
     TOKEN_ALREADY_EXISTS_ERROR("Token already exists"),
     TOKEN_EMPTY_ERROR("Token is empty"),
     TOKEN_EXPIRED_ERROR("Token has expired"),

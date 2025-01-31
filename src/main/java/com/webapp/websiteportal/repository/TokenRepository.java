@@ -1,10 +1,10 @@
-package com.webapp.bankingportal.repository;
+package com.webapp.websiteportal.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.webapp.bankingportal.entity.Account;
-import com.webapp.bankingportal.entity.Token;
+import com.webapp.websiteportal.entity.Account;
+import com.webapp.websiteportal.entity.Token;
 
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {

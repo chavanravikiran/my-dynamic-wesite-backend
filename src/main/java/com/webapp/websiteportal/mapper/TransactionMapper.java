@@ -1,9 +1,9 @@
-package com.webapp.bankingportal.mapper;
+package com.webapp.websiteportal.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.webapp.bankingportal.dto.TransactionDTO;
-import com.webapp.bankingportal.entity.Transaction;
+import com.webapp.websiteportal.dto.TransactionDTO;
+import com.webapp.websiteportal.entity.Transaction;
 
 @Component
 public class TransactionMapper {

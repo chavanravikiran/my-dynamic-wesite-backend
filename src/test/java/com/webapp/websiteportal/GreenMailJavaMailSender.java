@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import java.util.Date;
 import java.util.LinkedHashMap;

@@ -1,18 +1,18 @@
-package com.webapp.bankingportal.repository;
+package com.webapp.websiteportal.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.webapp.bankingportal.entity.User;
+import com.webapp.websiteportal.entity.Users;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
 
-    Optional<User> findByEmail(String email);
+    Optional<Users> findByEmail(String email);
 
-    Optional<User> findByPhoneNumber(String phoneNumber);
+    Optional<Users> findByPhoneNumber(String phoneNumber);
 
-    Optional<User> findByAccountAccountNumber(String accountNumber);
+    Optional<Users> findByAccountAccountNumber(String accountNumber);
 }

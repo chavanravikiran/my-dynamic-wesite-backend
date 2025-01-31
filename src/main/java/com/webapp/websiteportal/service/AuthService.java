@@ -1,16 +1,16 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
 import org.springframework.http.ResponseEntity;
 
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.dto.ResetPasswordRequest;
-import com.webapp.bankingportal.entity.User;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.dto.ResetPasswordRequest;
+import com.webapp.websiteportal.entity.Users;
 
 public interface AuthService {
-    public String generatePasswordResetToken(User user);
+    public String generatePasswordResetToken(Users user);
 
-    public boolean verifyPasswordResetToken(String token, User user);
+    public boolean verifyPasswordResetToken(String token, Users user);
 
     public void deletePasswordResetToken(String token);
 

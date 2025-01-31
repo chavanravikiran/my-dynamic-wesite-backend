@@ -1,6 +1,6 @@
-package com.webapp.bankingportal.dto;
+package com.webapp.websiteportal.dto;
 
-import com.webapp.bankingportal.entity.Account;
+import com.webapp.websiteportal.entity.Account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.config;
+package com.webapp.websiteportal.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.webapp.bankingportal.security.JwtAuthenticationEntryPoint;
-import com.webapp.bankingportal.security.JwtAuthenticationFilter;
-import com.webapp.bankingportal.service.TokenService;
+import com.webapp.websiteportal.security.JwtAuthenticationEntryPoint;
+import com.webapp.websiteportal.security.JwtAuthenticationFilter;
+import com.webapp.websiteportal.service.TokenService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -41,7 +41,11 @@ public class WebSecurityConfig {
             "swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/actuator/**"
+            "/actuator/**",
+            "/openApi/**",
+            "/openApiGallery/**",
+            "/openApiForFollowUs/**",
+            "/api/**"
     };
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.exception;
+package com.webapp.websiteportal.exception;
 
 public class UserInvalidException extends RuntimeException {
 

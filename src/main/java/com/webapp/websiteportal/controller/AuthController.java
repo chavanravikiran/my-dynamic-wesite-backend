@@ -1,12 +1,12 @@
-package com.webapp.bankingportal.controller;
+package com.webapp.websiteportal.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.dto.ResetPasswordRequest;
-import com.webapp.bankingportal.service.AuthService;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.dto.ResetPasswordRequest;
+import com.webapp.websiteportal.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

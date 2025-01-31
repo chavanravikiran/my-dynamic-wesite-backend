@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.service;
+package com.webapp.websiteportal.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.dto.ResetPasswordRequest;
-import com.webapp.bankingportal.entity.PasswordResetToken;
-import com.webapp.bankingportal.entity.User;
-import com.webapp.bankingportal.repository.PasswordResetTokenRepository;
-import com.webapp.bankingportal.util.ApiMessages;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.dto.ResetPasswordRequest;
+import com.webapp.websiteportal.entity.PasswordResetToken;
+import com.webapp.websiteportal.entity.Users;
+import com.webapp.websiteportal.repository.PasswordResetTokenRepository;
+import com.webapp.websiteportal.util.ApiMessages;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
 
     @Override
-    public String generatePasswordResetToken(User user) {
+    public String generatePasswordResetToken(Users user) {
         val existingToken = passwordResetTokenRepository.findByUser(user);
         if (isExistingTokenValid(existingToken)) {
             return existingToken.getToken();
@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyPasswordResetToken(String token, User user) {
+    public boolean verifyPasswordResetToken(String token, Users user) {
         return passwordResetTokenRepository.findByToken(token)
                 .map(resetToken -> {
                     deletePasswordResetToken(token);
@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
         return existingToken != null && existingToken.getExpiryDateTime().isAfter(LocalDateTime.now().plusMinutes(5));
     }
 
-    private ResponseEntity<String> sendOtpEmail(User user, String accountNumber, String generatedOtp) {
+    private ResponseEntity<String> sendOtpEmail(Users user, String accountNumber, String generatedOtp) {
         val emailSendingFuture = otpService.sendOTPByEmail(user.getEmail(), user.getName(), accountNumber,
                 generatedOtp);
 

@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.dto;
+package com.webapp.websiteportal.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

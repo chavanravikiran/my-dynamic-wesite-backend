@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.config;
+package com.webapp.websiteportal.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -14,4 +14,10 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*");
     }
+//	   @Override
+//	    public void addCorsMappings(@NonNull CorsRegistry registry) {
+//	        registry.addMapping("/openApi/**") // Apply CORS only to /openApi/** endpoints
+//	                .allowedOrigins("*")       // Allow all origins (adjust as needed for production)
+//	                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS"); // Restrict HTTP methods if needed
+//	    }
 }

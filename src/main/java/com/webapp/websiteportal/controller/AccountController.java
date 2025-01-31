@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.controller;
+package com.webapp.websiteportal.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webapp.bankingportal.dto.AmountRequest;
-import com.webapp.bankingportal.dto.FundTransferRequest;
-import com.webapp.bankingportal.dto.PinRequest;
-import com.webapp.bankingportal.dto.PinUpdateRequest;
-import com.webapp.bankingportal.service.AccountService;
-import com.webapp.bankingportal.service.TransactionService;
-import com.webapp.bankingportal.util.ApiMessages;
-import com.webapp.bankingportal.util.JsonUtil;
-import com.webapp.bankingportal.util.LoggedinUser;
+import com.webapp.websiteportal.dto.AmountRequest;
+import com.webapp.websiteportal.dto.FundTransferRequest;
+import com.webapp.websiteportal.dto.PinRequest;
+import com.webapp.websiteportal.dto.PinUpdateRequest;
+import com.webapp.websiteportal.service.AccountService;
+import com.webapp.websiteportal.service.TransactionService;
+import com.webapp.websiteportal.util.ApiMessages;
+import com.webapp.websiteportal.util.JsonUtil;
+import com.webapp.websiteportal.util.LoggedinUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -37,6 +37,12 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/pin/get")
+    public ResponseEntity<Boolean> checkIfPinExists() {
+        boolean pinExists = accountService.doesPinExist(LoggedinUser.getAccountNumber());
+        return ResponseEntity.ok(pinExists);
+    }
+    
     @PostMapping("/pin/create")
     public ResponseEntity<String> createPIN(@RequestBody PinRequest pinRequest) {
         accountService.createPin(
@@ -49,11 +55,15 @@ public class AccountController {
 
     @PostMapping("/pin/update")
     public ResponseEntity<String> updatePIN(@RequestBody PinUpdateRequest pinUpdateRequest) {
-        accountService.updatePin(
-                LoggedinUser.getAccountNumber(),
-                pinUpdateRequest.oldPin(),
-                pinUpdateRequest.password(),
-                pinUpdateRequest.newPin());
+    	if(!pinUpdateRequest.oldPin().equals(pinUpdateRequest.newPin())) {
+    		accountService.updatePin(
+    				LoggedinUser.getAccountNumber(),
+    				pinUpdateRequest.oldPin(),
+    				pinUpdateRequest.password(),
+    				pinUpdateRequest.newPin());    		
+    	}else {
+    		 return ResponseEntity.ok(ApiMessages.OLD_AND_NEW_PIN_ARE_SAME.getMessage());
+    	}
 
         return ResponseEntity.ok(ApiMessages.PIN_UPDATE_SUCCESS.getMessage());
     }

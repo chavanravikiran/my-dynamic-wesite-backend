@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.val;
@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webapp.bankingportal.exception.InsufficientBalanceException;
-import com.webapp.bankingportal.exception.InvalidAmountException;
-import com.webapp.bankingportal.exception.InvalidPinException;
-import com.webapp.bankingportal.exception.NotFoundException;
-import com.webapp.bankingportal.exception.UnauthorizedException;
-import com.webapp.bankingportal.repository.AccountRepository;
+import com.webapp.websiteportal.exception.InsufficientBalanceException;
+import com.webapp.websiteportal.exception.InvalidAmountException;
+import com.webapp.websiteportal.exception.InvalidPinException;
+import com.webapp.websiteportal.exception.NotFoundException;
+import com.webapp.websiteportal.exception.UnauthorizedException;
+import com.webapp.websiteportal.repository.AccountRepository;
 
 public class AccountServiceTests extends BaseTest {
 

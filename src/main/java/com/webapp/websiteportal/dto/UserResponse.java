@@ -1,6 +1,6 @@
-package com.webapp.bankingportal.dto;
+package com.webapp.websiteportal.dto;
 
-import com.webapp.bankingportal.entity.User;
+import com.webapp.websiteportal.entity.Users;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class UserResponse {
     private String branch;
     private String accountType;
 
-    public UserResponse(User user) {
+    public UserResponse(Users user) {
         this.name = user.getName();
         this.email = user.getEmail();
         this.countryCode = user.getCountryCode();

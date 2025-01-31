@@ -1,4 +1,4 @@
-package com.webapp.bankingportal;
+package com.webapp.websiteportal;
 
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Assertions;
@@ -10,14 +10,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.jayway.jsonpath.JsonPath;
-
-import com.webapp.bankingportal.dto.LoginRequest;
-import com.webapp.bankingportal.dto.OtpRequest;
-import com.webapp.bankingportal.dto.OtpVerificationRequest;
-import com.webapp.bankingportal.dto.PinRequest;
-import com.webapp.bankingportal.service.TokenService;
-import com.webapp.bankingportal.util.ApiMessages;
-import com.webapp.bankingportal.util.JsonUtil;
+import com.webapp.websiteportal.dto.LoginRequest;
+import com.webapp.websiteportal.dto.OtpRequest;
+import com.webapp.websiteportal.dto.OtpVerificationRequest;
+import com.webapp.websiteportal.dto.PinRequest;
+import com.webapp.websiteportal.service.TokenService;
+import com.webapp.websiteportal.util.ApiMessages;
+import com.webapp.websiteportal.util.JsonUtil;
 
 import lombok.val;
 

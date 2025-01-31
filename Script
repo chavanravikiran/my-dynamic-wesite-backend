@@ -1,0 +1,78 @@
+--website_details
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.EREGISTRATION.com','EREGISTRATION','EREGISTRATION.png','EREGISTRATION','ईनोंदणी','ई-रजिस्ट्रेशन');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.ECOMMERCE_WEBSITE.com','ECOMMERCE_WEBSITE','ECOMMERCE_WEBSITE.png','ECOMMERCE WEBSITE','ईकॉमर्स वेबसाइट','ई-कॉमर्स वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.BUSINESS_WEBSITE.com','BUSINESS_WEBSITE','BUSINESS_WEBSITE.png','BUSINESS WEBSITE','व्यवसाय वेबसाइट','व्यापार वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.BLOG_WEBSITE.com','BLOG_WEBSITE','BLOG_WEBSITE.png','BLOG WEBSITE','ब्लॉग वेबसाइट','ब्लॉग वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.PORTFOLIO_WEBSITE.com','PORTFOLIO_WEBSITE','PORTFOLIO_WEBSITE.png','PORTFOLIO WEBSITE','पोर्टफोलिओ वेबसाइट','पोर्टफोलियो वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.EVENT_WEBSITE.com','EVENT_WEBSITE','EVENT_WEBSITE.png','EVENT WEBSITE','कार्यक्रम वेबसाइट','इवेंट वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.PERSONAL_WEBSITE.com','PERSONAL_WEBSITE','PERSONAL_WEBSITE.png','PERSONAL WEBSITE','वैयक्तिक वेबसाइट','व्यक्तिगत वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.MEMBERSHIP_WEBSITE.com','MEMBERSHIP_WEBSITE','MEMBERSHIP_WEBSITE.png','MEMBERSHIP WEBSITE','सदस्यता वेबसाइट','मेंबरशिप वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.NONPROFIT_WEBSITE.com','NONPROFIT_WEBSITE','NONPROFIT_WEBSITE.png','NONPROFIT WEBSITE','सेवाभावी वेबसाइट','गैर-लाभकारी वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.INFORMATIONAL_WEBSITE.com','INFORMATIONAL_WEBSITE','INFORMATIONAL_WEBSITE.png','INFORMATIONAL WEBSITE','माहितीपर वेबसाइट','सूचनात्मक वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.ONLINE_FORUM.com','ONLINE_FORUM','ONLINE_FORUM.png','ONLINE FORUM','ऑनलाइन मंच','ऑनलाइन फोरम');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.COMMUNITY_WEBSITE.com','COMMUNITY_WEBSITE','COMMUNITY_WEBSITE.png','COMMUNITY WEBSITE','समुदाय वेबसाइट','समुदाय वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.STARTUP_WEBSITE.com','STARTUP_WEBSITE','STARTUP_WEBSITE.png','STARTUP WEBSITE','स्टार्टअप वेबसाइट','स्टार्टअप वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.CONSULTING_WEBSITE.com','CONSULTING_WEBSITE','CONSULTING_WEBSITE.png','CONSULTING WEBSITE','सल्ला देणारी वेबसाइट','परामर्श वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.BOOKING_WEBSITE.com','BOOKING_WEBSITE','BOOKING_WEBSITE.png','BOOKING WEBSITE','बुकिंग वेबसाइट','बुकिंग वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.PETITION_WEBSITE.com','PETITION_WEBSITE','PETITION_WEBSITE.png','PETITION WEBSITE','विनंती वेबसाइट','याचिका वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.SCHOOL_WEBSITE.com','SCHOOL_WEBSITE','SCHOOL_WEBSITE.png','SCHOOL WEBSITE','शाळा वेबसाइट','स्कूल वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.HOBBY_WEBSITE.com','HOBBY_WEBSITE','HOBBY_WEBSITE.png','HOBBY WEBSITE','छंद वेबसाइट','शौक वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.INTERACTIVE_WEBSITE.com','INTERACTIVE_WEBSITE','INTERACTIVE_WEBSITE.png','INTERACTIVE WEBSITE','परस्परसंवादी वेबसाइट','इंटरएक्टिव वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.ENTERTAINMENT_WEBSITE.com','ENTERTAINMENT_WEBSITE','ENTERTAINMENT_WEBSITE.png','ENTERTAINMENT WEBSITE','मनोरंजन वेबसाइट','मनोरंजन वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.WEDDING_WEBSITE.com','WEDDING_WEBSITE','WEDDING_WEBSITE.png','WEDDING WEBSITE','लग्न वेबसाइट','शादी की वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.TRAVEL_WEBSITE.com','TRAVEL_WEBSITE','TRAVEL_WEBSITE.png','TRAVEL WEBSITE','प्रवास वेबसाइट','यात्रा वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.DIRECTORY_WEBSITE.com','DIRECTORY_WEBSITE','DIRECTORY_WEBSITE.png','DIRECTORY WEBSITE','निर्देशिका वेबसाइट','डायरेक्टरी वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.LANDING_PAGE_WEBSITE.com','LANDING_PAGE_WEBSITE','LANDING_PAGE_WEBSITE.png','LANDING PAGE WEBSITE','लँडिंग पृष्ठ वेबसाइट','लैंडिंग पेज वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.NEWS_AND_MAGAZINE_WEBSITE.com','NEWS_AND_MAGAZINE_WEBSITE','NEWS_AND_MAGAZINE_WEBSITE.png','NEWS AND MAGAZINE WEBSITE','बातम्या आणि मासिक वेबसाइट','समाचार और पत्रिका वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.MEMORIAL_WEBSITE.com','MEMORIAL_WEBSITE','MEMORIAL_WEBSITE.png','MEMORIAL WEBSITE','स्मृती वेबसाइट','स्मारक वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.SUBSCRIPTION_WEBSITE.com','SUBSCRIPTION_WEBSITE','SUBSCRIPTION_WEBSITE.png','SUBSCRIPTION WEBSITE','वर्गणी वेबसाइट','सब्सक्रिप्शन वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.KID_FRIENDLY_WEBSITE.com','KID_FRIENDLY_WEBSITE','KID_FRIENDLY_WEBSITE.png','KID FRIENDLY WEBSITE','मुलांसाठी अनुकूल वेबसाइट','बच्चों के अनुकूल वेबसाइट');
+insert into website_details(key,created_by,created_on,is_Active,version,old_website_link,web_site_type,website_logo,website_name,website_name_mr,website_name_hi)values(nextval('website_details_seq'),1,now(),'Y',0,'www.LAND_AND_ESTATE.com','LAND_AND_ESTATE','LAND_AND_ESTATE.png','LAND AND ESTATE','जमीन आणि इस्टेट','भूमि और संपत्ति');
+
+
+--feature_menu
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Home','होम');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,2,'Services','सेवा');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,3,'Gallery','गैलरी');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,4,'Inquiry','चौकशी');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,5,'About','बद्दल');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,6,'contactUs','आमच्याशी संपर्क साधा');
+
+
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,1,1);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,2,1);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,3,1);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,4,1);
+
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,1,2);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,2,2);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,6,2);
+
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,1,3);
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,2,3);
+
+
+--assign new header for respective website
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='ECOMMERCE_WEBSITE')),(select key from feature_menu where feature_name='Gallery'),(select key from website_details where web_site_type='ECOMMERCE_WEBSITE'));
+
+
+--
+insert into contact_us_features (key,created_by,created_on,is_active,version,display_seq,address,email,latitude,longitude,office_type,phone_number,websitedetail_id) values(nextval('contact_us_features_seq'),1,now(),'Y',0,1,'34/8B Kasarsai, Opp. Indian Oil Petrol Pump,, Near Mulshi Cricket Ground, Somatne - Kasarsai Road, Pune, Maharashtra 410506','ravikiranchavan97@gmail.com','18.6259511','73.6806494','HEAD_OFFICE','8552805879',(select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'));
+insert into contact_us_features (key,created_by,created_on,is_active,version,display_seq,address,email,latitude,longitude,office_type,phone_number,websitedetail_id) values(nextval('contact_us_features_seq'),1,now(),'Y',0,1,'28/4, near GANGA OSIAN MEADOWS, Pawar Nagar, Thergaon, Pimpri-Chinchwad, Maharashtra 411033','ravikiranchavan9450@gmail.com','18.6155109','73.7755246','SUB_OFFICE','8999750015',(select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'));
+

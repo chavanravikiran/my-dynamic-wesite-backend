@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.security;
+package com.webapp.websiteportal.security;
 
 import java.io.IOException;
 
@@ -10,8 +10,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.webapp.bankingportal.exception.InvalidTokenException;
-import com.webapp.bankingportal.service.TokenService;
+import com.webapp.websiteportal.exception.InvalidTokenException;
+import com.webapp.websiteportal.service.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

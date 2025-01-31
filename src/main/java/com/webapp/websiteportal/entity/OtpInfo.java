@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.entity;
+package com.webapp.websiteportal.entity;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,8 +16,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class OtpInfo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "otpInfo_seq")
+    @SequenceGenerator(name = "otpInfo_seq", sequenceName = "otpInfo_seq", allocationSize = 1)
     private Long id;
 
     @Column(unique = true)

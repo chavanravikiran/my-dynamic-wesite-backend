@@ -1,4 +1,4 @@
-package com.webapp.bankingportal.config;
+package com.webapp.websiteportal.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
