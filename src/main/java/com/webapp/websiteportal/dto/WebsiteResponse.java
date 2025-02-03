@@ -43,4 +43,15 @@ public class WebsiteResponse extends MessageResponse{
 				.status(ServiceStatus.SUCCESS)
 				.build();
 	}
+
+	public static WebsiteResponse init(Optional<WebSiteDetails> webSiteDetails, String base64) {
+		return WebsiteResponse.builder()
+				.key(webSiteDetails.get().getKey())
+				.websiteName(webSiteDetails.get().getWebsiteName())
+				.websiteNameMr(webSiteDetails.get().getWebsiteNameMr())
+				.oldWebsiteLink(webSiteDetails.get().getOldWebsiteLink())
+				.websiteLogo(base64)
+				.status(ServiceStatus.SUCCESS)
+				.build();
+	}
 }
