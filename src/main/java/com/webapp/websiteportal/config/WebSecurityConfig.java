@@ -45,6 +45,7 @@ public class WebSecurityConfig {
             "/openApi/**",
             "/openApiGallery/**",
             "/openApiForFollowUs/**",
+            "/api/student/**",
             "/api/**"
     };
 

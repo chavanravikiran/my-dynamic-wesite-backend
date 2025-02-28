@@ -1,0 +1,26 @@
+package com.webapp.websiteportal.entity;
+
+public enum languageName {
+	
+	ENGLISH,
+	SPANISH,
+	FRENCH,
+	GERMAN,
+	CHINESE,
+	HINDI,
+	ARABIC,
+	PORTUGUESE,
+	RUSSIAN,
+	JAPANESE,
+	KOREAN,
+	ITALIAN,
+	TURKISH,
+	DUTCH,
+	SWEDISH,
+	POLISH,
+	BENGALI,
+	TAMIL,
+	TELUGU,
+	MALAY,
+	MARATHI,
+}

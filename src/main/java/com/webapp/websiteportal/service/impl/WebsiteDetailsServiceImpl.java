@@ -1,5 +1,6 @@
 package com.webapp.websiteportal.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class WebsiteDetailsServiceImpl implements IWebsiteDetailsService{
     private String logoImage;
 	
 	@Override
-	public WebsiteResponse fetchWebSiteDetails() {
+	public WebsiteResponse fetchWebSiteDetails() throws IOException {
 		Optional<WebSiteDetails> webSiteDetails = websiteDetailsRepository.findByKeyAndIsActive(1L,'Y');
 		if(webSiteDetails.isPresent()) {
 			String folderPath=logoImage+"/";

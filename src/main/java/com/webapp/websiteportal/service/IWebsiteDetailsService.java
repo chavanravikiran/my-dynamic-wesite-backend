@@ -1,5 +1,6 @@
 package com.webapp.websiteportal.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,7 +12,7 @@ import com.webapp.websiteportal.entity.WebSiteDetails;
 
 public interface IWebsiteDetailsService {
 
-	public WebsiteResponse fetchWebSiteDetails();
+	public WebsiteResponse fetchWebSiteDetails() throws IOException;
 
 //	public Optional<WebSiteDetails> findByKeyAndIsActive(Long websiteId, Character isActive);
 

@@ -14,6 +14,7 @@ import com.webapp.websiteportal.service.IS3Service;
 
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -201,43 +202,81 @@ public class S3ServiceImpl implements IS3Service{
     }
 
 	@Override
-	public FileModelResponse downloadFileWithPath(String fileName, String folderPath) {
+	public FileModelResponse downloadFileWithPath(String fileName, String folderPath) throws IOException {
 		FileModelResponse response = new FileModelResponse();
 //        String folderPath= "images/GalleryImages";
         
 		String fileKey = folderPath.replaceAll("/+$", "") + "/" + fileName; 
 		fileKey = fileKey.replaceAll("\"", "");
 		
-        try (InputStream inputStream = s3Client.getObject(GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(fileKey)
-                .build())) {
-            byte[] fileContent = inputStream.readAllBytes();
+		try {
+	        response = fetchFileFromS3(fileKey);
+	    } catch (NoSuchKeyException e) {
+	        // If file not found, attempt to fetch the static file
+	        response = fetchFileFromS3("images/logoImage/logo.png");
+	        if (response.getStatus().equals("Failure")) {
+	            response.setErrorMessage("Requested file and fallback file not found.");
+	        }
+	    } catch (IOException e) {
+	        response.setBase64("");
+	        response.setStatus("Failure");
+	        response.setErrorMessage("Failed to download file: " + e.getMessage());
+	    }
+	return response;
+	
+//        try (InputStream inputStream = s3Client.getObject(GetObjectRequest.builder()
+//                .bucket(bucketName)
+//                .key(fileKey)
+//                .build())) {
+//            byte[] fileContent = inputStream.readAllBytes();
+//
+//            // Encode byte array into Base64
+//            String base64Encoded = Base64.encodeBase64String(fileContent);
+//
+//         // Extract file extension from the file name
+//            String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+//
+//            // Get the correct MIME type based on the file extension
+//            String mimeType = getMimeType(fileExtension);
+//
+//            // Construct the base64 string with the MIME type prefix
+//            String base64WithMimeType = "data:" + mimeType + ";base64," + base64Encoded;
+//
+//            // Set the response
+//            response.setBase64(base64WithMimeType);
+//            response.setStatus("Success");
+//            response.setErrorMessage("");
+//           
+//        } catch (IOException e) {
+//        	response.setBase64("");
+//            response.setStatus("Failure");
+//            response.setErrorMessage("Failed to download file: " + e.getMessage());
+//        }
+//
+//        return response;
+	}
+	
+	private FileModelResponse fetchFileFromS3(String fileKey) throws IOException {
+	    FileModelResponse response = new FileModelResponse();
+	    try (InputStream inputStream = s3Client.getObject(GetObjectRequest.builder()
+	            .bucket(bucketName)
+	            .key(fileKey)
+	            .build())) {
 
-            // Encode byte array into Base64
-            String base64Encoded = Base64.encodeBase64String(fileContent);
+	        byte[] fileContent = inputStream.readAllBytes();
+	        String base64Encoded = Base64.encodeBase64String(fileContent);
 
-         // Extract file extension from the file name
-            String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+	        // Extract file extension and determine MIME type
+	        String fileExtension = fileKey.substring(fileKey.lastIndexOf('.') + 1).toLowerCase();
+	        String mimeType = getMimeType(fileExtension);
 
-            // Get the correct MIME type based on the file extension
-            String mimeType = getMimeType(fileExtension);
-
-            // Construct the base64 string with the MIME type prefix
-            String base64WithMimeType = "data:" + mimeType + ";base64," + base64Encoded;
-
-            // Set the response
-            response.setBase64(base64WithMimeType);
-            response.setStatus("Success");
-            response.setErrorMessage("");
-           
-        } catch (IOException e) {
-        	response.setBase64("");
-            response.setStatus("Failure");
-            response.setErrorMessage("Failed to download file: " + e.getMessage());
-        }
-
-        return response;
+	        // Construct base64 response
+	        String base64WithMimeType = "data:" + mimeType + ";base64," + base64Encoded;
+	        response.setBase64(base64WithMimeType);
+	        response.setStatus("Success");
+	        response.setErrorMessage("");
+	    }
+	    return response;
 	}
 
 }

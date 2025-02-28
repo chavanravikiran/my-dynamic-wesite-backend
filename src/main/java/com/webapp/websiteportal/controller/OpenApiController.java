@@ -1,5 +1,6 @@
 package com.webapp.websiteportal.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,12 +55,12 @@ public class OpenApiController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/websiteData")
-	public WebsiteResponse getWebSiteDetails()  {
+	public WebsiteResponse getWebSiteDetails() throws IOException  {
 		return websiteDetailsService.fetchWebSiteDetails();
 	}
 	
 	@GetMapping("/{websiteType}")
-	public ResponseEntity<WebSiteDetailsResponse> getWebsiteDetails(@PathVariable WebSiteType  websiteType) {
+	public ResponseEntity<WebSiteDetailsResponse> getWebsiteDetails(@PathVariable WebSiteType  websiteType) throws IOException {
 		Optional<WebSiteDetails> webSiteDetails=websiteDetailsRepository.findByWebSiteType(websiteType);
 		WebSiteDetailsResponse response=null; 
 		if(webSiteDetails.isPresent()) {
