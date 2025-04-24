@@ -2,6 +2,7 @@ package com.webapp.websiteportal.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.webapp.websiteportal.entity.StudentPortfolio;
 
@@ -16,7 +17,7 @@ public class PortfolioModel {
 
 	private Long key;
     private String studentName;
-    private byte[] selfPhoto;
+//    private byte[] selfPhoto;
     private Long age;
     private String websiteName;
     private Long websiteNameId;
@@ -25,6 +26,7 @@ public class PortfolioModel {
     private List<SkillModel> skill;
     private List<ProjectModel> project;
     private List<LanguageModel> language;
+    private List<StudentExperienceModel> experiences;
     
     public PortfolioModel init(StudentPortfolio studentPortfolio) {
         this.key = studentPortfolio.getKey();
@@ -42,6 +44,7 @@ public class PortfolioModel {
         this.project = new ArrayList<>();
         this.language = new ArrayList<>();
 
+        this.experiences = new ArrayList<>();
         return this;
     }
 }

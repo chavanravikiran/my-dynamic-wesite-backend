@@ -1,15 +1,10 @@
 package com.webapp.websiteportal.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -41,11 +36,9 @@ public class FeatureMenu extends AbstractEntity{
 	@Column(nullable = false, length = 3000)
 	private String featureNameMr;
 	
+	private String featureIcon;
+	
 	@Column(name="display_seq")
 	private Long displaySeq;
     
-//    @OneToMany(mappedBy = "featureMenu", cascade = CascadeType.ALL)
-//    private List<WebsiteFeatureMenu> websiteFeatureMenus;
-//	 @OneToMany(mappedBy = "featureMenu", cascade = CascadeType.ALL)
-//	  private Set<WebsiteFeatureMenu> websiteFeatureMenus = new HashSet<>();
 }

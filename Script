@@ -45,6 +45,10 @@ insert into feature_menu (key,created_by,created_on,is_active,version,display_se
 values(nextval('feature_menu_seq'),1,now(),'Y',0,6,'contactUs','आमच्याशी संपर्क साधा');
 insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
 values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Portfolio','पोर्टफोलियो');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Login','लॉगिन');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Registration','नोंदणी');
 
 
 insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
@@ -77,8 +81,61 @@ values(nextval('website_feature_menu_seq'),1,now(),'Y',0,1,(select key from feat
 insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
 values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='ECOMMERCE_WEBSITE')),(select key from feature_menu where feature_name='Gallery'),(select key from website_details where web_site_type='ECOMMERCE_WEBSITE'));
 
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='EREGISTRATION')),
+(select key from feature_menu where feature_name='Registration'),(select key from website_details where web_site_type='EREGISTRATION'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='ECOMMERCE_WEBSITE')),
+(select key from feature_menu where feature_name='Registration'),(select key from website_details where web_site_type='ECOMMERCE_WEBSITE'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='PORTFOLIO_WEBSITE')),
+(select key from feature_menu where feature_name='Registration'),(select key from website_details where web_site_type='PORTFOLIO_WEBSITE'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='PERSONAL_WEBSITE')),
+(select key from feature_menu where feature_name='Registration'),(select key from website_details where web_site_type='PERSONAL_WEBSITE'));
+
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='EREGISTRATION')),
+(select key from feature_menu where feature_name='Login'),(select key from website_details where web_site_type='EREGISTRATION'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='ECOMMERCE_WEBSITE')),
+(select key from feature_menu where feature_name='Login'),(select key from website_details where web_site_type='ECOMMERCE_WEBSITE'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='PORTFOLIO_WEBSITE')),
+(select key from feature_menu where feature_name='Login'),(select key from website_details where web_site_type='PORTFOLIO_WEBSITE'));
+insert into website_feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_menu_key,website_details_key)
+values(nextval('website_feature_menu_seq'),1,now(),'Y',0,(select max(display_seq) from website_feature_menu where website_details_key in(select key from website_details where web_site_type='PERSONAL_WEBSITE')),
+(select key from feature_menu where feature_name='Login'),(select key from website_details where web_site_type='PERSONAL_WEBSITE'));
+
 
 --
 insert into contact_us_features (key,created_by,created_on,is_active,version,display_seq,address,email,latitude,longitude,office_type,phone_number,websitedetail_id) values(nextval('contact_us_features_seq'),1,now(),'Y',0,1,'34/8B Kasarsai, Opp. Indian Oil Petrol Pump,, Near Mulshi Cricket Ground, Somatne - Kasarsai Road, Pune, Maharashtra 410506','ravikiranchavan97@gmail.com','18.6259511','73.6806494','HEAD_OFFICE','8552805879',(select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'));
 insert into contact_us_features (key,created_by,created_on,is_active,version,display_seq,address,email,latitude,longitude,office_type,phone_number,websitedetail_id) values(nextval('contact_us_features_seq'),1,now(),'Y',0,1,'28/4, near GANGA OSIAN MEADOWS, Pawar Nagar, Thergaon, Pimpri-Chinchwad, Maharashtra 411033','ravikiranchavan9450@gmail.com','18.6155109','73.7755246','SUB_OFFICE','8999750015',(select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'));
 
+
+insert into project (key,created_by,created_on,is_active,version,project_name,description,student_portfolio_id,developed_type)
+values(nextval('project_seq'),1,now(),'Y',0,'Demand And Assessment','The Demand and Assessment Building Survey is a data collection initiative aimed at understanding the needs, preferences, and challenges faced by citizens in a specific region. This project will utilize surveys, interviews, and digital tools to gather insights from residents, helping policymakers, urban planners, and local authorities make informed decisions for community development.\n Identify Community Needs: Gather data on essential services such as healthcare, education, transportation, and infrastructure.
+\n Assess Public Satisfaction: Evaluate citizen satisfaction with existing services and identify areas of improvement. 
+\n Prioritize Development Projects: Use collected data to prioritize future projects based on citizen demand.
+\n Enhance Policy-Making: Provide authorities with reliable data to formulate effective policies and action plans.
+\n Improve Citizen Engagement: Encourage public participation in decision-making through interactive feedback mechanisms.
+\n Geospatial Mapping: Location-based analysis to identify specific areas requiring attention.',1,'EXPERIENCE');
+
+
+insert into student_experience(key,created_by,created_on,is_active,version,company_name,end_date_on_working_project,start_date_on_working_project,technology,student_portfolio_id)
+values(nextval('student_experience_seq'),1,now(),'Y',0,'Probity Soft Pvt Ltd.',null,'2022-05-17','SPRING BOOT,HIBERNATE,JPA,ANGULAR,POSTGRESQL',1);
+
+
+
+----Website_Role_feature_menu table
+INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
+VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_ADMIN', (select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'), (select key from feature_menu where feature_name ='Services'));
+INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
+VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_ADMIN', (select key from website_details where web_site_type ='ECOMMERCE_WEBSITE'), (select key from feature_menu where feature_name ='Inquiry'));
+
+
+--join
+select wfm.key,wfm.is_active,feature_name,wd.web_site_type
+from website_feature_menu wfm,feature_menu fm,website_details wd
+where fm.key=wfm.feature_menu_key and wfm.website_details_key=wd.key and wd.web_site_type='ECOMMERCE_WEBSITE'
+order by wfm.key;

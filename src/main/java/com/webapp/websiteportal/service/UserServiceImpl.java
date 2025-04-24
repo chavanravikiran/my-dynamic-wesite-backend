@@ -1,239 +1,135 @@
 package com.webapp.websiteportal.service;
 
-import java.sql.Timestamp;
-import java.util.concurrent.CompletableFuture;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.webapp.websiteportal.dto.LoginRequest;
-import com.webapp.websiteportal.dto.OtpRequest;
-import com.webapp.websiteportal.dto.OtpVerificationRequest;
-import com.webapp.websiteportal.dto.UserResponse;
+import com.webapp.websiteportal.dto.MessageResponse;
+import com.webapp.websiteportal.dto.RegisterRequest;
+import com.webapp.websiteportal.entity.PasswordResetTokenNew;
 import com.webapp.websiteportal.entity.Users;
-import com.webapp.websiteportal.exception.InvalidTokenException;
-import com.webapp.websiteportal.exception.PasswordResetException;
-import com.webapp.websiteportal.exception.UnauthorizedException;
-import com.webapp.websiteportal.exception.UserInvalidException;
-import com.webapp.websiteportal.mapper.UserMapper;
+import com.webapp.websiteportal.entity.WebSiteDetails;
+import com.webapp.websiteportal.entity.WebSiteType;
+import com.webapp.websiteportal.repository.PasswordResetTokenNewRepository;
 import com.webapp.websiteportal.repository.UserRepository;
-import com.webapp.websiteportal.util.ApiMessages;
-import com.webapp.websiteportal.util.JsonUtil;
-import com.webapp.websiteportal.util.LoggedinUser;
-import com.webapp.websiteportal.util.ValidationUtil;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.webapp.websiteportal.repository.WebsiteDetailsRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
-
-    private final AccountService accountService;
-    private final AuthenticationManager authenticationManager;
-    private final EmailService emailService;
-    private final GeolocationService geolocationService;
-    private final OtpService otpService;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
-    private final UserDetailsService userDetailsService;
-    private final UserMapper userMapper;
+public class UserServiceImpl implements UserDetailsService { // ✅ Implements UserDetailsService
+	
     private final UserRepository userRepository;
-    private final ValidationUtil validationUtil;
+    private final PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private PasswordResetTokenNewRepository tokenRepository;
 
-    @Override
-    public ResponseEntity<String> registerUser(Users user) {
-        validationUtil.validateNewUser(user);
-        encodePassword(user);
-        val savedUser = saveUserWithAccount(user);
-        return ResponseEntity.ok(JsonUtil.toJson(new UserResponse(savedUser)));
+    @Autowired
+    private WebsiteDetailsRepository websiteDetailsRepository;
+    
+    @Autowired
+    private JavaMailSender mailSender;
+    
+    @Value("${application.selfUrl}")
+    private String selfUrl;
+    
+    public ResponseEntity<?> registerUser(RegisterRequest request) {
+    	try {
+    		if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+    			return ResponseEntity.badRequest().body("Username already exists");
+    		}
+    		
+    		Users user = new Users();
+    		user.setName(request.getName());
+    		user.setUsername(request.getUsername());
+    		user.setEmail(request.getEmail());
+    		user.setPhoneNumber(request.getPhoneNumber());
+    		user.setAddress(request.getAddress());
+    		user.setCountryCode("IND");
+    		user.setPassword(passwordEncoder.encode(request.getPassword()));//$2a$10$764UuV07AOzJPZOdpSwrb.NeWIb365tcYJQ.Zvl1bXKTxtOaMhDp2  -->Admin@123
+    		user.setWebSiteDetails(websiteDetailsRepository.findByWebSiteTypeAndIsActive(request.getWebsiteType(), 'Y'));
+    		userRepository.save(user);
+    		return ResponseEntity.ok("User registered successfully");
+    	}catch (Exception e) {
+    		log.error("Error registering user: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body("An unexpected error occurred while registering the user.");
+		}
     }
 
     @Override
-    public ResponseEntity<String> login(LoginRequest loginRequest, HttpServletRequest request)
-            throws InvalidTokenException {
-        val user = authenticateUser(loginRequest);
-        sendLoginNotification(user, request.getRemoteAddr());
-        val token = generateAndSaveToken(user.getAccount().getAccountNumber());
-        return ResponseEntity.ok(String.format(ApiMessages.TOKEN_ISSUED_SUCCESS.getMessage(), token));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
-    @Override
-    public ResponseEntity<String> generateOtp(OtpRequest otpRequest) {
-        val user = getUserByIdentifier(otpRequest.identifier());
-        val otp = otpService.generateOTP(user.getAccount().getAccountNumber());
-        return sendOtpEmail(user, otp);
+    public Users getUserByUsernameAndWebSiteDetails(String username,Optional<WebSiteDetails> websiteDetails) {
+        return userRepository.findByUsernameAndWebSiteDetails(username,websiteDetails).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
-    @Override
-    public ResponseEntity<String> verifyOtpAndLogin(OtpVerificationRequest otpVerificationRequest)
-            throws InvalidTokenException {
-        validateOtpRequest(otpVerificationRequest);
-        val user = getUserByIdentifier(otpVerificationRequest.identifier());
-        validateOtp(user, otpVerificationRequest.otp());
-        val token = generateAndSaveToken(user.getAccount().getAccountNumber());
-        return ResponseEntity.ok(String.format(ApiMessages.TOKEN_ISSUED_SUCCESS.getMessage(), token));
-    }
-
-    @Override
-    public ResponseEntity<String> updateUser(Users updatedUser) {
-        val accountNumber = LoggedinUser.getAccountNumber();
-        authenticateUser(accountNumber, updatedUser.getPassword());
-        val existingUser = getUserByAccountNumber(accountNumber);
-        updateUserDetails(existingUser, updatedUser);
-        val savedUser = saveUser(existingUser);
-        return ResponseEntity.ok(JsonUtil.toJson(new UserResponse(savedUser)));
-    }
-
-    @Override
-    @Transactional
-    public boolean resetPassword(Users user, String newPassword) {
-        try {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
-            return true;
-        } catch (Exception e) {
-            throw new PasswordResetException(ApiMessages.PASSWORD_RESET_FAILURE.getMessage(), e);
-        }
-    }
-
-    @Override
-    public ModelAndView logout(String token) throws InvalidTokenException {
-        token = token.substring(7);
-        tokenService.validateToken(token);
-        tokenService.invalidateToken(token);
-
-        log.info("User logged out successfully {}", tokenService.getUsernameFromToken(token));
-
-        return new ModelAndView("redirect:/logout");
-    }
-
-    @Override
-    public Users saveUser(Users user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Users getUserByIdentifier(String identifier) {
-        Users user = null;
-
-        if (validationUtil.doesEmailExist(identifier)) {
-            user = getUserByEmail(identifier);
-        } else if (validationUtil.doesAccountExist(identifier)) {
-            user = getUserByAccountNumber(identifier);
-        } else {
-            throw new UserInvalidException(
-                    String.format(ApiMessages.USER_NOT_FOUND_BY_IDENTIFIER.getMessage(), identifier));
+    public ResponseEntity<MessageResponse> sendPasswordResetLink(String email) {
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body(MessageResponse.error("Email not found"));
         }
 
-        return user;
-    }
+        Users user = userOpt.get();
+        Optional<PasswordResetTokenNew> tokenExist = tokenRepository.findByUser(user);
 
-    @Override
-    public Users getUserByAccountNumber(String accountNo) {
-        return userRepository.findByAccountAccountNumber(accountNo).orElseThrow(
-                () -> new UserInvalidException(
-                        String.format(ApiMessages.USER_NOT_FOUND_BY_ACCOUNT.getMessage(), accountNo)));
-    }
-
-    @Override
-    public Users getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(
-                () -> new UserInvalidException(String.format(ApiMessages.USER_NOT_FOUND_BY_EMAIL.getMessage(), email)));
-    }
-
-    private void encodePassword(Users user) {
-        user.setCountryCode(user.getCountryCode().toUpperCase());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-    }
-
-    private Users saveUserWithAccount(Users user) {
-        val savedUser = saveUser(user);
-        savedUser.setAccount(accountService.createAccount(savedUser));
-        return saveUser(savedUser);
-    }
-
-    private Users authenticateUser(LoginRequest loginRequest) {
-        val user = getUserByIdentifier(loginRequest.identifier());
-        val accountNumber = user.getAccount().getAccountNumber();
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(accountNumber, loginRequest.password()));
-        return user;
-    }
-
-    private void authenticateUser(String accountNumber, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountNumber, password));
-    }
-
-    private String generateAndSaveToken(String accountNumber) throws InvalidTokenException {
-        val userDetails = userDetailsService.loadUserByUsername(accountNumber);
-        val token = tokenService.generateToken(userDetails);
-        tokenService.saveToken(token);
-        return token;
-    }
-
-    private ResponseEntity<String> sendOtpEmail(Users user, String otp) {
-        val emailSendingFuture = otpService.sendOTPByEmail(
-                user.getEmail(), user.getName(), user.getAccount().getAccountNumber(), otp);
-
-        ResponseEntity<String> successResponse = ResponseEntity
-                .ok(String.format(ApiMessages.OTP_SENT_SUCCESS.getMessage(), user.getEmail()));
-        ResponseEntity<String> failureResponse = ResponseEntity.internalServerError()
-                .body(String.format(ApiMessages.OTP_SENT_FAILURE.getMessage(), user.getEmail()));
-
-        return emailSendingFuture.thenApply(result -> successResponse)
-                .exceptionally(e -> failureResponse).join();
-    }
-
-    private void validateOtpRequest(OtpVerificationRequest request) {
-        if (request.identifier() == null || request.identifier().isEmpty()) {
-            throw new IllegalArgumentException(ApiMessages.IDENTIFIER_MISSING_ERROR.getMessage());
+        if (tokenExist.isPresent()) {
+            return ResponseEntity.badRequest().body(MessageResponse.error("Reset link already sent to your email:"+email));
         }
-        if (request.otp() == null || request.otp().isEmpty()) {
-            throw new IllegalArgumentException(ApiMessages.OTP_MISSING_ERROR.getMessage());
+
+        String token = UUID.randomUUID().toString();
+        PasswordResetTokenNew resetToken = new PasswordResetTokenNew();
+        resetToken.setToken(token);
+        resetToken.setUser(user);
+        resetToken.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+        tokenRepository.save(resetToken);
+
+        String resetUrl = selfUrl+"/reset-password?token=" + token;
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setSubject("Reset Your Password");
+        mail.setText("Click the link below to reset your password:\n" + resetUrl + "\nThis link will expire in 30 minutes.");
+        mailSender.send(mail);
+
+        return ResponseEntity.ok(MessageResponse.successWithMsg("Password reset link sent to your email"));
+    }
+    
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetTokenNew resetToken = tokenRepository.findByToken(token)
+            .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expired");
         }
-    }
 
-    private void validateOtp(Users user, String otp) {
-        if (!otpService.validateOTP(user.getAccount().getAccountNumber(), otp)) {
-            throw new UnauthorizedException(ApiMessages.OTP_INVALID_ERROR.getMessage());
+        Users user = resetToken.getUser();
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new RuntimeException("New password cannot be same as old password");
         }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        tokenRepository.delete(resetToken);
     }
-
-    private void updateUserDetails(Users existingUser, Users updatedUser) {
-        ValidationUtil.validateUserDetails(updatedUser);
-        updatedUser.setPassword(existingUser.getPassword());
-        userMapper.updateUser(updatedUser, existingUser);
-    }
-
-    private CompletableFuture<Boolean> sendLoginNotification(Users user, String ip) {
-        val loginTime = new Timestamp(System.currentTimeMillis()).toString();
-
-        return geolocationService.getGeolocation(ip)
-                .thenComposeAsync(geolocationResponse -> {
-                    val loginLocation = String.format("%s, %s",
-                            geolocationResponse.getCity().getNames().get("en"),
-                            geolocationResponse.getCountry().getNames().get("en"));
-                    return sendLoginEmail(user, loginTime, loginLocation);
-                })
-                .exceptionallyComposeAsync(throwable -> sendLoginEmail(user, loginTime, "Unknown"));
-    }
-
-    private CompletableFuture<Boolean> sendLoginEmail(Users user, String loginTime, String loginLocation) {
-        val emailText = emailService.getLoginEmailTemplate(user.getName(), loginTime, loginLocation);
-        return emailService.sendEmail(user.getEmail(), ApiMessages.EMAIL_SUBJECT_LOGIN.getMessage(), emailText)
-                .thenApplyAsync(result -> true)
-                .exceptionally(ex -> false);
-    }
-
+    
 }

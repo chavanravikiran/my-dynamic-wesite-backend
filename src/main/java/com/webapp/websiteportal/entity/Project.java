@@ -2,6 +2,8 @@ package com.webapp.websiteportal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,8 +36,13 @@ public class Project extends AbstractEntity{
 	private Long key;
 	
 	private String projectName;
+	
+	@Column(name = "description", length =3000)
 	private String description;
 
+	@Enumerated(EnumType.STRING) // Check if this is an Enum
+    private DevelopedType developedType;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "student_portfolio_id", referencedColumnName = "key")
 	private StudentPortfolio studentPortfolio;
@@ -43,4 +50,9 @@ public class Project extends AbstractEntity{
 	@ManyToOne
     @JoinColumn(name = "company_portfolio_id")
     private CompanyPortfolio companyPortfolio;
+	
+	// Map Project to Experience (Many Projects → One Experience)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_experience_id")
+    private StudentExperience studentExperience;
 }

@@ -1,16 +1,10 @@
 package com.webapp.websiteportal.dto;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import com.webapp.websiteportal.dto.MessageResponse.ServiceStatus;
 import com.webapp.websiteportal.entity.WebSiteDetails;
-import com.webapp.websiteportal.entity.WebSiteType;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

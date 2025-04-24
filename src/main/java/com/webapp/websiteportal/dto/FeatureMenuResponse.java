@@ -14,5 +14,6 @@ public class FeatureMenuResponse{
 	private Long key;
     private String featureName;
     private String featureNameMr;
+    private String featureIcon;
     private Long displaySeq;
 }

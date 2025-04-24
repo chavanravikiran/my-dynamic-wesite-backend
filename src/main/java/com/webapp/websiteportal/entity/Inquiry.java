@@ -10,11 +10,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @Builder
@@ -22,26 +27,41 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "galleryFeatures")
-public class GalleryFeature extends AbstractEntity{
+@Table(name = "inquiry")
+public class Inquiry extends AbstractEntity{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "key", nullable = false)
-	@SequenceGenerator(name = "gallery_feature_seq", sequenceName = "gallery_feature_seq", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "gallery_feature_seq")
+	@SequenceGenerator(name = "inquiry_seq", sequenceName = "inquiry_seq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "inquiry_seq")
 	private Long key;
 	
-	@Column(nullable = false, length = 3000)
-	private String imageName;
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z]+$")
+	private String firstName;
 	
-	@Column(name="altImageName",length = 3000)
-	private String altImageName;
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z]+$")
+	private String lastName;
 	
-	private Long displaySeq;
+	@NotBlank
+    @Email
+    private String email;
 	
-	private String galleryType;
+//	@NotBlank
+    @Pattern(regexp = "^[0-9]{10}$")
+    private String phone;
+	
+	@NotBlank
+	@Column(name="title")
+	private String title;
+	
+	@NotBlank
+    @Size(min = 10)
+	@Column(name="message",length = 3000)
+    private String message;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "WEBSITEDETAIL_ID", referencedColumnName = "key")

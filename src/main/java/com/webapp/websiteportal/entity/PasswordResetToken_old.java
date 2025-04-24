@@ -18,10 +18,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "passwordresettoken")
+@Table(name = "passwordresettoken_old")
 @Data
 @NoArgsConstructor
-public class PasswordResetToken implements Serializable {
+public class PasswordResetToken_old implements Serializable {
 	private static final long serialVersionUID = -4123074818114107723L;
 
 	@Id
@@ -39,7 +39,7 @@ public class PasswordResetToken implements Serializable {
     @Column(nullable = false)
     private LocalDateTime expiryDateTime;
 
-    public PasswordResetToken(String token, Users user, LocalDateTime expiryDateTime) {
+    public PasswordResetToken_old(String token, Users user, LocalDateTime expiryDateTime) {
         this.token = token;
         this.user = user;
         this.expiryDateTime = expiryDateTime;

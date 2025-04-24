@@ -164,23 +164,23 @@ public class ValidationUtil {
         validatePassword(user.getPassword());
     }
 
-    public void validateNewUser(Users user) {
-        validateUserDetails(user);
-        if (doesEmailExist(user.getEmail())) {
-            throw new UserInvalidException(ApiMessages.USER_EMAIL_ALREADY_EXISTS_ERROR.getMessage());
-        }
-        if (doesPhoneNumberExist(user.getPhoneNumber())) {
-            throw new UserInvalidException(ApiMessages.USER_PHONE_NUMBER_ALREADY_EXISTS_ERROR.getMessage());
-        }
-    }
+//    public void validateNewUser(Users user) {
+//        validateUserDetails(user);
+//        if (doesEmailExist(user.getEmail())) {
+//            throw new UserInvalidException(ApiMessages.USER_EMAIL_ALREADY_EXISTS_ERROR.getMessage());
+//        }
+//        if (doesPhoneNumberExist(user.getPhoneNumber())) {
+//            throw new UserInvalidException(ApiMessages.USER_PHONE_NUMBER_ALREADY_EXISTS_ERROR.getMessage());
+//        }
+//    }
 
     public boolean doesAccountExist(String accountNumber) {
         return userRepository.findByAccountAccountNumber(accountNumber).isPresent();
     }
 
-    public boolean doesEmailExist(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
+//    public boolean doesEmailExist(String email) {
+//        return userRepository.findByEmail(email).isPresent();
+//    }
 
     public boolean doesPhoneNumberExist(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber).isPresent();

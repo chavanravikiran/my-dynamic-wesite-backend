@@ -13,10 +13,12 @@ public class ProjectModel {
     private Long key;
     private String projectName;
     private String description;
+    private String developedType;
 
     public ProjectModel(Project project) {
         this.key = project.getKey();
         this.projectName = project.getProjectName();
         this.description = project.getDescription();
+        this.developedType = project.getDevelopedType().toString();
     }
 }
