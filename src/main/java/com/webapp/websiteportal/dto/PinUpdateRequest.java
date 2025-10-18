@@ -1,4 +1,8 @@
 package com.webapp.websiteportal.dto;
 
-public record PinUpdateRequest(String accountNumber, String oldPin, String newPin, String password) {
+//public record PinUpdateRequest(String accountNumber, String oldPin, String newPin, String password) {
+//}
+
+public class PinUpdateRequest{
+	
 }

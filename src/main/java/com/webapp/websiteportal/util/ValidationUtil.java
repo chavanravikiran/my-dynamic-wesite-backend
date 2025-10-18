@@ -78,7 +78,8 @@ public class ValidationUtil {
         val message = new StringBuilder();
         message.append("Password must contain at least ");
 
-        var needsComma = false;
+//        var needsComma = false;
+        boolean needsComma = false;
         if (!password.matches(".*[A-Z].*")) {
             message.append("one uppercase letter");
             needsComma = true;

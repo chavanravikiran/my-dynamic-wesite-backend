@@ -139,3 +139,21 @@ select wfm.key,wfm.is_active,feature_name,wd.web_site_type
 from website_feature_menu wfm,feature_menu fm,website_details wd
 where fm.key=wfm.feature_menu_key and wfm.website_details_key=wd.key and wd.web_site_type='ECOMMERCE_WEBSITE'
 order by wfm.key;
+
+
+---Book appointment and Create Appointment Slot-create Feature and assign to Role
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr,feature_icon)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Book Appointment','बुक अपॉइंटमेंट','fa-calendar-check');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr,feature_icon)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'Create Appointment Slot','अपॉइंटमेंट स्लॉट तयार करा','fa-calendar-check');
+insert into feature_menu (key,created_by,created_on,is_active,version,display_seq,feature_name,feature_name_mr,feature_icon)
+values(nextval('feature_menu_seq'),1,now(),'Y',0,1,'My Appointment','माझी अपॉइंटमेंट','fa-book-spine');
+
+
+INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
+VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_USER', (select key from website_details where web_site_type ='EREGISTRATION'), (select key from feature_menu where feature_name ='Book Appointment'));
+INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
+VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_ADMIN', (select key from website_details where web_site_type ='EREGISTRATION'), (select key from feature_menu where feature_name ='Create Appointment Slot'));
+INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
+VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_USER', (select key from website_details where web_site_type ='EREGISTRATION'), (select key from feature_menu where feature_name ='My Appointment'));
+

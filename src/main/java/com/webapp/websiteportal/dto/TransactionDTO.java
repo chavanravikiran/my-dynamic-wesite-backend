@@ -30,7 +30,7 @@ public class TransactionDTO {
         this.sourceAccountNumber = transaction.getSourceAccount().getAccountNumber();
 
         val targetAccount = transaction.getTargetAccount();
-        var targetAccountNumber = "N/A";
+//        var targetAccountNumber = "N/A";
         if (targetAccount != null) {
             targetAccountNumber = targetAccount.getAccountNumber();
         }
