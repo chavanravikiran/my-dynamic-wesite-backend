@@ -119,7 +119,7 @@ public class OtpServiceImpl implements OtpService {
     }
 
     private int getOtpAttempts(String accountNumber) {
-        var otpAttempts = 0;
+        val otpAttempts = 0;
         val cache = cacheManager.getCache("otpAttempts");
         if (cache == null) {
             return otpAttempts;
@@ -127,7 +127,7 @@ public class OtpServiceImpl implements OtpService {
 
         val value = cache.get(accountNumber, Integer.class);
         if (value != null) {
-            otpAttempts = value;
+//            otpAttempts = value;
         }
 
         return otpAttempts;

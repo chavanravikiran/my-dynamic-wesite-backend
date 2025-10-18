@@ -1,5 +1,7 @@
 package com.webapp.websiteportal.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -26,6 +28,12 @@ public class S3ServiceImpl implements IS3Service{
 
     @Value("${aws.bucketName}")
     private String bucketName;
+    
+    @Value("${application.storage.type}")
+    private String storageType;
+
+    @Value("${application.local.basepath}")
+    private String localBasePath;
 
     public String uploadFile(MultipartFile file) {
         String fileName = "images/GalleryImages/" + file.getOriginalFilename();
@@ -206,14 +214,38 @@ public class S3ServiceImpl implements IS3Service{
 		FileModelResponse response = new FileModelResponse();
 //        String folderPath= "images/GalleryImages";
         
-		String fileKey = folderPath.replaceAll("/+$", "") + "/" + fileName; 
-		fileKey = fileKey.replaceAll("\"", "");
+		String fileKeyOrPath = folderPath.replaceAll("/+$", "") + "/" + fileName; 
+		fileKeyOrPath  = fileKeyOrPath.replaceAll("\"", "");
 		
+//		try {
+//	        response = fetchFileFromS3(fileKey);
+//	    } catch (NoSuchKeyException e) {
+//	        // If file not found, attempt to fetch the static file
+//	        response = fetchFileFromS3("images/logoImage/logo.png");
+//	        if (response.getStatus().equals("Failure")) {
+//	            response.setErrorMessage("Requested file and fallback file not found.");
+//	        }
+//	    } catch (IOException e) {
+//	        response.setBase64("");
+//	        response.setStatus("Failure");
+//	        response.setErrorMessage("Failed to download file: " + e.getMessage());
+//	    }
 		try {
-	        response = fetchFileFromS3(fileKey);
+	        if ("local".equalsIgnoreCase(storageType)) {
+	            // Fetch from local system
+	            response = fetchFileFromLocal(fileKeyOrPath);
+	        } else {
+	            // Fetch from S3
+	            response = fetchFileFromS3(fileKeyOrPath);
+	        }
 	    } catch (NoSuchKeyException e) {
-	        // If file not found, attempt to fetch the static file
-	        response = fetchFileFromS3("images/logoImage/logo.png");
+	        // Fallback for S3
+	        if (!"local".equalsIgnoreCase(storageType)) {
+	            response = fetchFileFromS3("images/logoImage/logo.png");
+	        } else {
+	            response = fetchFileFromLocal("images/logoImage/logo.png");
+	        }
+
 	        if (response.getStatus().equals("Failure")) {
 	            response.setErrorMessage("Requested file and fallback file not found.");
 	        }
@@ -278,5 +310,36 @@ public class S3ServiceImpl implements IS3Service{
 	    }
 	    return response;
 	}
+	
+	private FileModelResponse fetchFileFromLocal(String relativePath) throws IOException {
+	    FileModelResponse response = new FileModelResponse();
+
+	    // Construct absolute path (combine base path + relative folder path)
+	    File file = new File(localBasePath, relativePath);
+	    if (!file.exists()) {
+	        response.setStatus("Failure");
+	        response.setErrorMessage("Local file not found: " + file.getAbsolutePath());
+	        return response;
+	    }
+
+	    try (InputStream inputStream = new FileInputStream(file)) {
+	        byte[] fileContent = inputStream.readAllBytes();
+	        String base64Encoded = Base64.encodeBase64String(fileContent);
+
+	        // Determine MIME type
+	        String fileExtension = file.getName().substring(file.getName().lastIndexOf('.') + 1).toLowerCase();
+	        String mimeType = getMimeType(fileExtension);
+
+	        // Construct Base64 Data URL
+	        String base64WithMimeType = "data:" + mimeType + ";base64," + base64Encoded;
+
+	        response.setBase64(base64WithMimeType);
+	        response.setStatus("Success");
+	        response.setErrorMessage("");
+	    }
+
+	    return response;
+	}
+
 
 }

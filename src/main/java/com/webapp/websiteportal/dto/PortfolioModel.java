@@ -2,10 +2,7 @@ package com.webapp.websiteportal.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.webapp.websiteportal.entity.StudentPortfolio;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

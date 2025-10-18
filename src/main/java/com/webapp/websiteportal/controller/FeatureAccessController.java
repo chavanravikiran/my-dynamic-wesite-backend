@@ -22,7 +22,7 @@ public class FeatureAccessController {
     private IWebsiteRoleFeatureService featureService;
 
     @GetMapping("/websiteRoleUserFeature/{userId}")
-    public List<FeatureMenuResponse> getFeaturesByUser(@PathVariable Long userId) {
+    public List<FeatureMenuResponse> getFeaturesByUser(@PathVariable Long userId) throws Exception {
         List<FeatureMenuResponse> features = featureService.getUserWiseFeatures(userId);
         return features;
     }

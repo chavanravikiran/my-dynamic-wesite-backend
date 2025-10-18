@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="appointment_receipt" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="userName" class="java.lang.String"/>
+	<parameter name="serviceName" class="java.lang.String"/>
+	<parameter name="date" class="java.lang.String"/>
+	<parameter name="startTime" class="java.lang.String"/>
+	<parameter name="endTime" class="java.lang.String"/>
+	<parameter name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="40" backcolor="#2B7CFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="18" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Appointment Receipt]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="150">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="140" backcolor="#F5F6FA"/>
+				<textField>
+					<reportElement x="10" y="10" width="535" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Name: " + $P{userName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="10" y="35" width="535" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Service: " + $P{serviceName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="10" y="60" width="535" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Date: " + $P{date}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="10" y="85" width="535" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Time: " + $P{startTime} + " - " + $P{endTime}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="10" y="110" width="535" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Status: " + $P{status}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

@@ -2,9 +2,7 @@ package com.webapp.websiteportal.dto;
 
 import java.util.List;
 import java.util.Optional;
-
 import com.webapp.websiteportal.entity.WebSiteDetails;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
