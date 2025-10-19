@@ -3,7 +3,6 @@ package com.webapp.websiteportal.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -29,7 +28,6 @@ import com.webapp.websiteportal.entity.Users;
 import com.webapp.websiteportal.entity.WebSiteDetails;
 import com.webapp.websiteportal.repository.AppointmentSlotRepository;
 import com.webapp.websiteportal.repository.BookAppointmentRepository;
-import com.webapp.websiteportal.repository.ContactUsRepository;
 import com.webapp.websiteportal.repository.WebsiteDetailsRepository;
 import com.webapp.websiteportal.service.IAppointmentService;
 import jakarta.transaction.Transactional;
@@ -97,118 +95,6 @@ public class AppointmentServiceImpl implements IAppointmentService{
 	}
 
 	
-    public List<AvailableIntervalDTO> getAvailableIntervals(Long slotId) {
-        AppointmentSlot slot = slotRepo.findById(slotId)
-                .orElseThrow(() -> new IllegalArgumentException("Slot not found"));
-
-        return computeAvailableIntervals(slot);
-    }
-
-    public List<AvailableIntervalDTO> getAvailableByWebsiteAndDate(WebSiteDetails website, LocalDate date) {
-        List<AppointmentSlot> slots = slotRepo.findByWebSiteDetailsAndDateAndIsActive(website, date,'Y');
-        List<AvailableIntervalDTO> result = new ArrayList<>();
-        for (AppointmentSlot s : slots) {
-            result.addAll(computeAvailableIntervals(s));
-        }
-        return result;
-    }
-
-    public List<AvailableIntervalDTO> computeAvailableIntervals(AppointmentSlot slot) {
-        List<AvailableIntervalDTO> list = new ArrayList<>();
-        LocalTime t = slot.getFromTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        while (!t.isAfter(slot.getToTime().minusMinutes(slot.getIntervalMinutes()))) {
-            LocalTime end = t.plusMinutes(slot.getIntervalMinutes());
-            long booked = bookRepo.countByAppointmentSlotAndDateAndStartTimeAndStatus(
-                    slot, slot.getDate(), t, BookAppointment.Status.BOOKED
-            );
-            int available = Math.max(0, slot.getSlotsPerInterval() - (int) booked);
-
-            list.add(new AvailableIntervalDTO(
-                    slot.getServiceName(),
-                    slot.getKey(),
-                    t.format(formatter),
-                    end.format(formatter),
-                    available,
-                    slot.getDate() // <-- include date here
-            ));
-
-            t = end;
-        }
-        return list;
-    }
-
-    @Override
-    public Map<LocalDate, List<AvailableIntervalDTO>> getAvailableFromToday(WebSiteDetails website) {
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
-
-        // Fetch all active future slots
-        List<AppointmentSlot> slots = slotRepo.findByWebSiteDetailsAndIsActive(website, 'Y')
-        	    .stream()
-        	    .filter(s -> !s.getDate().isBefore(today)) // future or today
-        	    .sorted(Comparator.comparing(AppointmentSlot::getDate)
-        	            .thenComparing(AppointmentSlot::getFromTime))
-        	    .toList();
-
-        List<AvailableIntervalDTO> allIntervals = new ArrayList<>();
-
-        for (AppointmentSlot slot : slots) {
-            allIntervals.addAll(computeAvailableIntervalsWithValidation(slot, today, now));
-        }
-
-        // Group by date for Angular
-        return allIntervals.stream()
-                .collect(Collectors.groupingBy(AvailableIntervalDTO::getDate,
-                        LinkedHashMap::new,
-                        Collectors.toList()));
-    }
-
-    private List<AvailableIntervalDTO> computeAvailableIntervalsWithValidation(AppointmentSlot slot, LocalDate today, LocalTime now) {
-        List<AvailableIntervalDTO> list = new ArrayList<>();
-        LocalTime start = slot.getFromTime();
-        LocalTime end = slot.getToTime();
-
-        // Ensure correct order
-        if (end.isBefore(start)) {
-            LocalTime tmp = start;
-            start = end;
-            end = tmp;
-        }
-
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        LocalTime t = start;
-        while (!t.isAfter(end.minusMinutes(slot.getIntervalMinutes()))) {
-            LocalTime intervalEnd = t.plusMinutes(slot.getIntervalMinutes());
-
-            // Skip past intervals for today
-            if (slot.getDate().isEqual(today) && intervalEnd.isBefore(now)) {
-                t = intervalEnd;
-                continue;
-            }
-
-            long bookedCount = bookRepo.countByAppointmentSlotAndDateAndStartTimeAndStatus(
-                    slot, slot.getDate(), t, BookAppointment.Status.BOOKED);
-
-            int available = Math.max(0, slot.getSlotsPerInterval() - (int) bookedCount);
-
-            list.add(new AvailableIntervalDTO(
-                    slot.getServiceName(),
-                    slot.getKey(),
-                    t.format(fmt),
-                    intervalEnd.format(fmt),
-                    available,
-                    slot.getDate()
-            ));
-
-            t = intervalEnd;
-        }
-        return list;
-    }
-
-    
     @Transactional
     public BookAppointment bookSlot(BookSlotRequest req, Users user) {
         AppointmentSlot slot = slotRepo.findById(req.getSlotId())
@@ -295,43 +181,50 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
  // Fetch paged & filtered appointments for the current user
-    public PagedResponse<MyAppointmentSummaryResponse> getMyAppointments(Users user,
-            Optional<String> statusOpt, Optional<LocalDate> dateFromOpt, Optional<LocalDate> dateToOpt,
-            int page, int size) {
+    public PagedResponse<MyAppointmentSummaryResponse> getMyAppointments(
+            Users user,
+            Optional<String> statusOpt,
+            Optional<LocalDate> dateFromOpt,
+            Optional<LocalDate> dateToOpt,
+            int page,
+            int size) {
 
         LocalDate from = dateFromOpt.orElse(LocalDate.of(1900, 1, 1));
         LocalDate to = dateToOpt.orElse(LocalDate.of(2999, 12, 31));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending().and(Sort.by("startTime")));
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by("date").descending().and(Sort.by("startTime")));
 
         Page<BookAppointment> pageResult;
 
         if (statusOpt.isPresent()) {
-            BookAppointment.Status status = BookAppointment.Status.valueOf(statusOpt.get());
+            BookAppointment.Status status = BookAppointment.Status.valueOf(statusOpt.get().toUpperCase());
             pageResult = bookRepo.findByUserAndStatusAndDateBetween(user, status, from, to, pageable);
         } else {
             pageResult = bookRepo.findByUserAndDateBetween(user, from, to, pageable);
         }
 
         List<MyAppointmentSummaryResponse> content = pageResult.stream()
-            .map(b -> new MyAppointmentSummaryResponse(
-                b.getKey(),
-                b.getAppointmentSlot().getServiceName(),
-                b.getDate(),
-                b.getStartTime(),
-                b.getEndTime(),
-                b.getStatus().name()
-            )).collect(Collectors.toList());
+                .map(b -> new MyAppointmentSummaryResponse(
+                        b.getKey(),
+                        b.getAppointmentSlot().getServiceName(),
+                        b.getDate(),
+                        b.getStartTime(),
+                        b.getEndTime(),
+                        b.getStatus().name()
+                ))
+                .collect(Collectors.toList());
 
         return new PagedResponse<>(
-            content,
-            pageResult.getNumber(),
-            pageResult.getSize(),
-            pageResult.getTotalElements(),
-            pageResult.getTotalPages(),
-            pageResult.isLast()
+                content,
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages(),
+                pageResult.isLast()
         );
     }
+
 
     // Confirm appointment (mark as COMPLETED)
     @Transactional
@@ -347,86 +240,62 @@ public class AppointmentServiceImpl implements IAppointmentService{
             throw new IllegalStateException("Only BOOKED appointments can be confirmed");
         }
 
-        // Optionally: restrict only if date/time <= now — skip if you want free confirm
         booking.setStatus(BookAppointment.Status.COMPLETED);
         BookAppointment saved = bookRepo.save(booking);
 
         return new MyAppointmentSummaryResponse(
-            saved.getKey(),
-            saved.getAppointmentSlot().getServiceName(),
-            saved.getDate(),
-            saved.getStartTime(),
-            saved.getEndTime(),
-            saved.getStatus().name()
+                saved.getKey(),
+                saved.getAppointmentSlot().getServiceName(),
+                saved.getDate(),
+                saved.getStartTime(),
+                saved.getEndTime(),
+                saved.getStatus().name()
         );
     }
 
-    @Override
-    public Map<LocalDate, List<AvailableIntervalDTO>> getAvailableFromTodayV1(WebSiteDetails website) {
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
 
-        // Fetch all active slots for this website
-        List<AppointmentSlot> slots = slotRepo.findByWebSiteDetailsAndIsActive(website, 'Y')
-                .stream()
-                .sorted(Comparator.comparing(AppointmentSlot::getDate)
-                        .thenComparing(AppointmentSlot::getFromTime))
-                .toList();
-
-        List<AvailableIntervalDTO> allIntervals = new ArrayList<>();
-
-        for (AppointmentSlot slot : slots) {
-            // Skip slots completely in the past
-            if (slot.getDate().isBefore(today)) continue;
-
-            allIntervals.addAll(computeAvailableIntervalsV1(slot, today, now));
-        }
-
-        // Group intervals by date for the frontend
-        return allIntervals.stream()
-                .collect(Collectors.groupingBy(
-                        AvailableIntervalDTO::getDate,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
-    }
-    
-    private List<AvailableIntervalDTO> computeAvailableIntervalsV1(AppointmentSlot slot, LocalDate today, LocalTime now) {
-        List<AvailableIntervalDTO> intervals = new ArrayList<>();
-        LocalTime start = slot.getFromTime();
-        LocalTime end = slot.getToTime();
-
-        // Ensure correct order
-        if (end.isBefore(start)) {
-            LocalTime tmp = start;
-            start = end;
-            end = tmp;
-        }
-
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        LocalTime t = start;
-        while (!t.isAfter(end.minusMinutes(slot.getIntervalMinutes()))) {
-            LocalTime intervalEnd = t.plusMinutes(slot.getIntervalMinutes());
-
-            long bookedCount = bookRepo.countByAppointmentSlotAndDateAndStartTimeAndStatus(
-                    slot, slot.getDate(), t, BookAppointment.Status.BOOKED);
-
-            int available = Math.max(0, slot.getSlotsPerInterval() - (int) bookedCount);
-
-            intervals.add(new AvailableIntervalDTO(
-                    slot.getServiceName(),
-                    slot.getKey(),
-                    t.format(fmt),
-                    intervalEnd.format(fmt),
-                    available,
-                    slot.getDate()
-            ));
-
-            t = intervalEnd;
-        }
-
-        return intervals;
-    }
-
+	@Override
+	public Map<LocalDate, List<AvailableIntervalDTO>> getAvailableFromTodayV3(WebSiteDetails website) {
+	    LocalDate today = LocalDate.now();
+	    LocalTime now = LocalTime.now();
+	
+	    // Fetch all active slots for this website
+	    List<AppointmentSlot> slots = slotRepo.findByWebSiteDetailsAndIsActive(website, 'Y')
+	            .stream()
+	            .sorted(Comparator.comparing(AppointmentSlot::getDate)
+	                    .thenComparing(AppointmentSlot::getFromTime))
+	            .toList();
+	
+	    List<AvailableIntervalDTO> allIntervals = new ArrayList<>();
+	
+	    for (AppointmentSlot slot : slots) {
+	        // Skip slots before today
+	        if (slot.getDate().isBefore(today)) continue;
+	
+	        // Skip intervals that already passed today
+	        if (slot.getDate().isEqual(today) && slot.getToTime().isBefore(now)) continue;
+	
+	        long bookedCount = bookRepo.countByAppointmentSlotAndDateAndStartTimeAndStatus(
+	                slot, slot.getDate(), slot.getFromTime(), BookAppointment.Status.BOOKED);
+	
+	        int available = Math.max(0, slot.getSlotsPerInterval() - (int) bookedCount);
+	
+	        allIntervals.add(new AvailableIntervalDTO(
+	                slot.getServiceName(),
+	                slot.getKey(),
+	                slot.getFromTime().toString(),
+	                slot.getToTime().toString(),
+	                available,
+	                slot.getDate()
+	        ));
+	    }
+	
+	    // Group by date for frontend
+	    return allIntervals.stream()
+	            .collect(Collectors.groupingBy(
+	                    AvailableIntervalDTO::getDate,
+	                    LinkedHashMap::new,
+	                    Collectors.toList()
+	            ));
+		}
 }
