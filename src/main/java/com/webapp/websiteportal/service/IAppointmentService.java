@@ -25,7 +25,7 @@ public interface IAppointmentService {
 
     public List<AvailableIntervalDTO> getAvailableByWebsiteAndDate(WebSiteDetails website, LocalDate date);
 
-    public List<AvailableIntervalDTO> computeAvailableIntervals(AppointmentSlot slot);
+//    public List<AvailableIntervalDTO> computeAvailableIntervals(AppointmentSlot slot);
 
     @Transactional
     public BookAppointment bookSlot(BookSlotRequest req, Users user);
@@ -37,5 +37,10 @@ public interface IAppointmentService {
     public void deactivateSlot(Long slotId, Users admin);
     
     public Map<LocalDate, List<AvailableIntervalDTO>> getAvailableFromToday(WebSiteDetails website);
+    
+    public Map<LocalDate, List<AvailableIntervalDTO>> getAvailableFromTodayV1(WebSiteDetails website);
+    
+    public List<AppointmentSlot> createSlotNew(CreateSlotRequest req, Users creator, WebSiteDetails webSiteDetail);
+    
 
 }
