@@ -45,14 +45,18 @@ public class AppointmentController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createSlot(@RequestBody CreateSlotRequest req,@AuthenticationPrincipal Users currentUser) {
 		// ensure admin belongs to same website
-		WebSiteDetails web = websiteDetailsRepository.findById(req.getWebsiteKey())
-				.orElseThrow(() -> new IllegalArgumentException("Website not found"));
-
-		if (!currentUser.getRole().name().equals("ROLE_ADMIN") || !currentUser.getWebSiteDetails().equals(web)) {
-			return ResponseEntity.status(403).body("Not authorized to create slot for this website");
+		WebSiteDetails webSiteDetail=websiteDetailsRepository.findByWebSiteTypeAndIsActive(req.getWebsiteType(),'Y');
+		if(webSiteDetail !=null) {
+			if (!currentUser.getRole().name().equals("ROLE_ADMIN") || !currentUser.getWebSiteDetails().equals(webSiteDetail)) {
+				return ResponseEntity.status(403).body("Not authorized to create slot for this website");
+			}
+			return ResponseEntity.ok(appointmentService.createSlot(req, currentUser,webSiteDetail));
+		}else {
+			return ResponseEntity.status(404).body("Website not found");
 		}
+//		WebSiteDetails web = websiteDetailsRepository.findById(webSiteDetail.getKey())
+//				.orElseThrow(() -> new IllegalArgumentException("Website not found"));
 
-		return ResponseEntity.ok(appointmentService.createSlot(req, currentUser));
 	}
 
 	// Admin: deactivate slot

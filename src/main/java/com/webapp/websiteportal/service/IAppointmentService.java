@@ -19,7 +19,7 @@ import jakarta.transaction.Transactional;
 
 public interface IAppointmentService {
 
-	public AppointmentSlot createSlot(CreateSlotRequest req, Users creator);
+	public AppointmentSlot createSlot(CreateSlotRequest req, Users creator,WebSiteDetails webSiteDetail);
 
     public List<AvailableIntervalDTO> getAvailableIntervals(Long slotId);
 

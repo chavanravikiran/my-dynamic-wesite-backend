@@ -52,15 +52,12 @@ public class AppointmentServiceImpl implements IAppointmentService{
 	private WebsiteDetailsRepository webSiteDetailsRepository;
 
     @Transactional
-    public AppointmentSlot createSlot(CreateSlotRequest req, Users creator) {
-        WebSiteDetails website = webSiteDetailsRepository.findById(req.getWebsiteKey())
+    public AppointmentSlot createSlot(CreateSlotRequest req, Users creator,WebSiteDetails webSiteDetail) {
+        WebSiteDetails website = webSiteDetailsRepository.findById(webSiteDetail.getKey())
                 .orElseThrow(() -> new IllegalArgumentException("Website not found"));
 
-        // Security/business check should be done at controller or service caller:
-        // Only admin for this website can create. We assume that's validated.
-
         AppointmentSlot slot = AppointmentSlot.builder()
-                .serviceName(req.getServiceName())
+                .serviceName(req.getWebsiteType().toString())
                 .webSiteDetails(website)
                 .date(req.getDate())
                 .fromTime(req.getFromTime())
@@ -68,7 +65,6 @@ public class AppointmentServiceImpl implements IAppointmentService{
                 .intervalMinutes(req.getIntervalMinutes())
                 .slotsPerInterval(req.getSlotsPerInterval())
                 .notes(req.getNotes())
-//                .active(true)
                 .build();
 
         return slotRepo.save(slot);
