@@ -1,16 +1,16 @@
 package com.webapp.websiteportal.controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.webapp.websiteportal.dto.AppointmentResponse;
 import com.webapp.websiteportal.dto.AvailableIntervalDTO;
 import com.webapp.websiteportal.dto.BookSlotRequest;
@@ -61,9 +60,6 @@ public class AppointmentController {
 		}else {
 			return ResponseEntity.status(404).body("Website not found");
 		}
-//		WebSiteDetails web = websiteDetailsRepository.findById(webSiteDetail.getKey())
-//				.orElseThrow(() -> new IllegalArgumentException("Website not found"));
-
 	}
 	
 	@PostMapping("/slotsNew")
@@ -85,39 +81,59 @@ public class AppointmentController {
 	    ));
 	}
 
-	@PostMapping("/create-slot")
-    public ResponseEntity<?> createSlotV2(@RequestBody CreateSlotRequest request) {
+	//Working 
+	@PostMapping("/create-slot-v3")
+	public ResponseEntity<?> createSlotV3(@RequestBody CreateSlotRequest request) {
 
-        List<AppointmentSlot> createdSlots = new ArrayList<>();
+	    List<AppointmentSlot> createdSlots = new ArrayList<>();
 
-        for (LocalDate date : request.getDates()) {
+	    for (LocalDate date : request.getDates()) {
 
-            boolean exists = slotRepository.existsByServiceNameAndDateAndFromTimeAndToTime(
-                request.getWebsiteType().toString(), date, request.getFromTime(), request.getToTime());
+	        WebSiteDetails webSiteDetail =
+	                websiteDetailsRepository.findByWebSiteTypeAndIsActive(request.getWebsiteType(), 'Y');
 
-            if (exists) {
-                return ResponseEntity.badRequest().body("Duplicate slot already exists for date: " + date);
-            }
+	        if (webSiteDetail == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Website not found");
+	        }
 
-            WebSiteDetails webSiteDetail = websiteDetailsRepository.findByWebSiteTypeAndIsActive(request.getWebsiteType(), 'Y');
-    	    if (webSiteDetail == null) {
-    	        return ResponseEntity.status(404).body("Website not found");
-    	    }
-            AppointmentSlot slot = new AppointmentSlot();
-            slot.setServiceName(request.getWebsiteType().toString());
-            slot.setWebSiteDetails(webSiteDetail);
-            slot.setDate(date);
-            slot.setFromTime(request.getFromTime());
-            slot.setToTime(request.getToTime());
-            slot.setIntervalMinutes(request.getIntervalMinutes());
-            slot.setSlotsPerInterval(request.getSlotsPerInterval());
-            slot.setNotes(request.getNotes());
+	        // Generate interval slots between fromTime → toTime
+	        LocalTime current = request.getFromTime();
+	        LocalTime end = request.getToTime();
 
-            createdSlots.add(slotRepository.save(slot));
-        }
+	        while (current.isBefore(end)) {
+	            LocalTime next = current.plusMinutes(request.getIntervalMinutes());
+	            if (next.isAfter(end)) {
+	                break;
+	            }
 
-        return ResponseEntity.ok(createdSlots);
-    }
+	            // Check for duplicate
+	            boolean exists = slotRepository.existsByServiceNameAndDateAndFromTimeAndToTime(
+	                    request.getWebsiteType().toString(), date, current, next);
+
+	            if (exists) {
+	                // skip duplicates but continue others
+	                current = next;
+	                continue;
+	            }
+
+	            AppointmentSlot slot = new AppointmentSlot();
+	            slot.setServiceName(request.getWebsiteType().toString());
+	            slot.setWebSiteDetails(webSiteDetail);
+	            slot.setDate(date);
+	            slot.setFromTime(current);
+	            slot.setToTime(next);
+	            slot.setIntervalMinutes(0); // because now this is a concrete interval
+	            slot.setSlotsPerInterval(request.getSlotsPerInterval());
+	            slot.setNotes(request.getNotes());
+
+	            createdSlots.add(slotRepository.save(slot));
+
+	            current = next;
+	        }
+	    }
+
+	    return ResponseEntity.ok(createdSlots);
+	}
 
 	// Admin: deactivate slot
 	@PutMapping("/slots/{slotId}")
@@ -125,32 +141,6 @@ public class AppointmentController {
 	public ResponseEntity<?> deactivateSlot(@PathVariable Long slotId, @AuthenticationPrincipal Users currentUser) {
 		appointmentService.deactivateSlot(slotId, currentUser);
 		return ResponseEntity.ok("Slot deactivated");
-	}
-
-	// Get intervals for a slot
-	@GetMapping("/slots/{slotId}/intervals")
-	@PreAuthorize("hasAnyRole('ADMIN','USER')")
-	public ResponseEntity<List<AvailableIntervalDTO>> getIntervals(@PathVariable Long slotId,
-			@AuthenticationPrincipal Users currentUser) {
-		// security: only allow if user's website equals slot's website
-		return ResponseEntity.ok(appointmentService.getAvailableIntervals(slotId));
-	}
-
-	// Get available intervals by websiteKey and date (user will call with their
-	// website)
-	@GetMapping("/website/{websiteKey}/date/{date}")
-	@PreAuthorize("hasAnyRole('ADMIN','USER')")
-	public ResponseEntity<?> getByWebsiteAndDate(@PathVariable Long websiteKey, @PathVariable String date,
-			@AuthenticationPrincipal Users currentUser) {
-		WebSiteDetails web = websiteDetailsRepository.findById(websiteKey)
-				.orElseThrow(() -> new IllegalArgumentException("Website not found"));
-
-		if (!currentUser.getWebSiteDetails().equals(web)) {
-			return ResponseEntity.status(403).body("Not authorized for this website");
-		}
-
-		LocalDate localDate = LocalDate.parse(date); // expect yyyy-MM-dd
-		return ResponseEntity.ok(appointmentService.getAvailableByWebsiteAndDate(web, localDate));
 	}
 
 	// Book (ROLE_USER)
@@ -184,33 +174,20 @@ public class AppointmentController {
 			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
 	}
-	
-	@GetMapping("/website/{websiteKey}/from-today")
-	@PreAuthorize("hasAnyRole('ADMIN','USER')")
-	public ResponseEntity<?> getSlotsFromToday(@PathVariable Long websiteKey, @AuthenticationPrincipal Users currentUser) {
-	    WebSiteDetails web = websiteDetailsRepository.findById(websiteKey)
-	            .orElseThrow(() -> new IllegalArgumentException("Website not found"));
 
-	    if (!currentUser.getWebSiteDetails().equals(web)) {
-	        return ResponseEntity.status(403).body("Not authorized for this website");
-	    }
-
-	    return ResponseEntity.ok(appointmentService.getAvailableFromTodayV1(web));
-	}
-
-	@GetMapping("/available-from-today/{websiteKey}")
-	public ResponseEntity<Map<LocalDate, List<AvailableIntervalDTO>>> getAvailableFromToday(
+	//new
+	@GetMapping("/available-from-today-v3/{websiteKey}")
+	public ResponseEntity<Map<LocalDate, List<AvailableIntervalDTO>>> getAvailableFromTodayV3(
 	        @PathVariable Long websiteKey) {
 
 	    WebSiteDetails website = websiteDetailsRepository.findById(websiteKey)
 	            .orElseThrow(() -> new IllegalArgumentException("Website not found"));
 
-	    Map<LocalDate, List<AvailableIntervalDTO>> result = appointmentService.getAvailableFromTodayV1(website);
+	    Map<LocalDate, List<AvailableIntervalDTO>> result = appointmentService.getAvailableFromTodayV3(website);
 	    return ResponseEntity.ok(result);
 	}
 
 	
-	// GET /api/appointments/my?page=0&size=10&status=BOOKED&dateFrom=2025-10-01&dateTo=2025-10-31
     @GetMapping("/my")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> myAppointments(

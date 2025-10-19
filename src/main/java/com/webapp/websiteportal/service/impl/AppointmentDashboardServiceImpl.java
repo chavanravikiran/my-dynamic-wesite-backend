@@ -16,11 +16,6 @@ public class AppointmentDashboardServiceImpl implements IAppointmentDashboardSer
 	@Autowired
 	private AppointmentDashboardViewRepository dashboardRepo;
 
-//	@Override
-//	 public List<AppointmentDashboardView> getDashboard() {
-////        return dashboardRepo.findAll();
-//		 return dashboardRepo.findAll(Sort.by("date", "fromTime"));
-//    }
 	@Override
 	public List<AppointmentDashboardView> getDashboard() {
 	    return dashboardRepo.findAll(Sort.by("id.date", "id.fromTime"));
