@@ -157,3 +157,5 @@ VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_ADMIN', (select key from
 INSERT INTO website_role_feature_menu (id, role, website_details_id, feature_menu_id)
 VALUES (NEXTVAL('website_role_feature_menu_seq'), 'ROLE_USER', (select key from website_details where web_site_type ='EREGISTRATION'), (select key from feature_menu where feature_name ='My Appointment'));
 
+
+insert into razorpay_config (key,created_by,created_on,is_active,version,api_key,api_secret,company_name,currency)values(nextval('razorpay_config_seq'),1,now(),'Y',0,'rzp_test_RVjX9VNm0tUznK','G4UJ1RWX7CBoPPOEWAlvvgTZ','Self Company','INR');
