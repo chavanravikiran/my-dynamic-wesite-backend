@@ -155,4 +155,16 @@ public class WebsiteDetailsServiceImpl implements IWebsiteDetailsService{
 			    response.setFeatureList(featureList);
 			    return response;
 	}
+
+	@Override
+	public List<WebsiteResponse> findByIsActive(Character isActive) {
+		List<WebSiteDetails> WebSiteDetails = websiteDetailsRepository.findByIsActive('Y');
+		return WebsiteResponse.init(WebSiteDetails);
+	}
+	
+	@Override
+	public List<WebsiteResponse> findAll(){
+		List<WebSiteDetails> WebSiteDetails = websiteDetailsRepository.findAllByOrderByKeyAsc();
+		return WebsiteResponse.init(WebSiteDetails);
+	}
 }

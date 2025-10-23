@@ -19,5 +19,9 @@ public interface IWebsiteDetailsService {
 	public WebSiteDetailsResponse getWebsiteDetailsById(Long websiteId);
 
 	public WebSiteDetailsResponse getWebsiteDetailsById(Long key, FileModelResponse response1);
+	
+//	public List<WebsiteResponse> findByIsActive(Character isActive);
+	public List<WebsiteResponse> findByIsActive(Character isActive);
 
+	public List<WebsiteResponse> findAll();
 }

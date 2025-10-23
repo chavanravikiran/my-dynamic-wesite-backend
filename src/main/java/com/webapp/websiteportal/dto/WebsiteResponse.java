@@ -2,9 +2,9 @@ package com.webapp.websiteportal.dto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.webapp.websiteportal.entity.FeatureMenu;
 import com.webapp.websiteportal.entity.WebSiteDetails;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WebsiteResponse extends MessageResponse{
 	
 	private static final long serialVersionUID = 5820582155836361527L;
@@ -32,6 +32,8 @@ public class WebsiteResponse extends MessageResponse{
 	private String websiteLogo;
 	
 	private String webSiteType;
+	
+	private Character isActive;
 	
 	public static WebsiteResponse init(Optional<WebSiteDetails> webSiteDetails) {
 		return WebsiteResponse.builder()
@@ -54,4 +56,17 @@ public class WebsiteResponse extends MessageResponse{
 				.status(ServiceStatus.SUCCESS)
 				.build();
 	}
+
+	public static List<WebsiteResponse> init(List<WebSiteDetails> webSiteDetailsList) {
+        return webSiteDetailsList.stream()
+                .map(detail -> WebsiteResponse.builder()
+                        .key(detail.getKey())
+                        .websiteName(detail.getWebsiteName())
+                        .websiteNameMr(detail.getWebsiteNameMr())
+                        .webSiteType(detail.getWebSiteType().toString())
+                        .status(ServiceStatus.SUCCESS)
+                        .isActive(detail.getIsActive())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
