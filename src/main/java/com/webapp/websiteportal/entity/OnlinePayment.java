@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "online_payments")
+@Table(name = "online_payment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,8 +34,8 @@ public class OnlinePayment extends AbstractEntity{
 
 	@Id
 	@Column(name = "key", nullable = false)
-	@SequenceGenerator(name = "online_payments_seq", sequenceName = "online_payments_seq", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "online_payments_seq")
+	@SequenceGenerator(name = "online_payment_seq", sequenceName = "online_payment_seq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "online_payment_seq")
 	private Long key;
     
     @Column(nullable = false, unique = true)
@@ -45,15 +45,14 @@ public class OnlinePayment extends AbstractEntity{
 
     private Long amount;  // amount in paise
     private String currency;
+    
+    @Column(name="user_id")
     private Long userId;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
     
     private  String paymentGateway;
-
-    private Instant createdAt;
-    private Instant updatedAt;
     
     private PaymentType paymentType;
     
