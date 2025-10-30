@@ -6,7 +6,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+//@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.webapp.websiteportal")
 @EnableCaching // Add this annotation to enable caching support
 @EnableAsync
 @EnableScheduling // Enable scheduling support 
